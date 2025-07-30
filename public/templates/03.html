@@ -146,39 +146,55 @@
       const form = document.querySelector("form");
       const wrapper = document.getElementById("tablice-wrapper");
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault(); // da se ne reloada jer je onda sve izbrisano posto se jos nigdje ne sprema
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-        const formData = new FormData(form);
-        const objekt = formData.get("OBJEKT");
-        const godina = formData.get("GODINA");
-        const mjesec = formData.get("MJESEC");
+  const formData = new FormData(form);
+  const objekt = formData.get("OBJEKT");
+  const godina = formData.get("GODINA");
+  const mjesec = formData.get("MJESEC");
 
-        // Nova kartica s tablicom
-        const card = document.createElement("div");
-        card.className = "card w-100 mb-5";
+  try {
+    const res = await fetch("/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ objekt, godina, mjesec })
+    });
 
-        card.innerHTML = `
-        <div class="card-body">
-          <p class="text-center fw-bold">Tablica dnevno dodane vode\nza ${mjesec}/${godina} "${objekt}"</p>
-          <dynamic-table></dynamic-table>
-          <div class="col-12 text-center mt-3">
-            <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
-          </div>
+    if (!res.ok) {
+      throw new Error("Greška pri spremanju podataka");
+    }
+
+    // Ako je uspješno spremljeno, prikaži tablicu
+    const card = document.createElement("div");
+    card.className = "card w-100 mb-5";
+
+    card.innerHTML = `
+      <div class="card-body">
+        <p class="text-center fw-bold">Tablica dnevno dodane vode<br>za ${mjesec}/${godina} "${objekt}"</p>
+        <dynamic-table></dynamic-table>
+        <div class="col-12 text-center mt-3">
+          <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
         </div>
-      `;
+      </div>
+    `;
 
-        // Gurni na vrh
-        wrapper.prepend(card);
+    wrapper.prepend(card);
 
-        // Gum za brisanje kartice
-        card.querySelector("remove-button").addEventListener("click", () => {
-          card.remove();
-        });
+    card.querySelector("remove-button").addEventListener("click", () => {
+      card.remove();
+    });
 
-        // Reset form
-        form.reset();
-      });
+    form.reset();
+  } catch (err) {
+    console.error(err);
+    alert("Neuspješno slanje podataka");
+  }
+});
+
+      
     });
   </script>
 </html>
