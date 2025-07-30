@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "NaslovniFont";
+  src: url("fonts/Alien-Encounters-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  height: 100vh;
+  background-color: rgba(66, 86, 76, 0.44);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  font-family: "NaslovniFont", cursive;
+  font-size: xx-large;
+  margin-top: 10%;
+}
+h2 {
+  font-size: 50px;
+  margin-top: 10%;
+  margin-bottom: 5%;
+}
+
+.container {
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+}
+.card {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: rgba(215, 225, 230, 1);
+  flex-direction: unset;
+  box-shadow: 0 2px 5px rgba(80, 42, 6, 0.467);
+}
+#wrapper {
+  padding-left: 0;
+}
+
+#sidebar-wrapper {
+  z-index: 100;
+  position: fixed;
+  left: 500px;
+  width: 0;
+  height: 100%;
+  margin-left: -500px;
+  background: rgba(82, 88, 85, 0.6);
+  overflow-x: hidden;
+  overflow-y: scroll; /* allow scrolling */
+  scrollbar-width: none; /* hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* hide scrollbar in IE 10+ */
+}
+
+#page-content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 0px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar-nav h1 {
+  padding: 20px;
+  color: #030303;
+  font-size: 60px;
+  margin: 20px 0 10px 0; /* malo razmaka od vrha i ispod */
+  text-align: left;
+}
+
+.sidebar-nav li {
+  text-indent: 0px;
+  line-height: normal;
+  padding: 0 10px; /* unutarnji razmak lijevo/desno */
+}
+
+.sidebar-nav li a {
+  display: block;
+  align-items: center; /* vertikalno centriraj tekst */
+  justify-content: flex-start; /* tekst poravnan ulijevo */
+  width: 100%; /* preuzmi punu širinu sidebar-a */
+  min-height: 70px; /* fiksna visina svih stavki */
+  padding: 0 10px; /* unutarnji razmak lijevo/desno */
+  text-align: left;
+  text-decoration: none;
+  color: #cacaca;
+}
+
+.sidebar-nav li a:hover {
+  text-decoration: none;
+  color: #1f1f1f;
+  background: rgba(255, 255, 255, 0.5);
+}
+#sadrzaj {
+  margin-left: 0px;
+  padding: 10px;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  #sadrzaj {
+    margin-left: 500px;
+    padding: 10px;
+
+    justify-content: center;
+  }
+  #wrapper {
+    padding-left: 500px;
+  }
+
+  #wrapper.toggled {
+    padding-left: 0;
+  }
+
+  #sidebar-wrapper {
+    width: 500px;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    width: 0;
+  }
+
+  #page-content-wrapper {
+    padding: 21px;
+    position: relative;
+  }
+
+  #wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+  }
+}
