@@ -2,14 +2,13 @@ class DynamicTable extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.columns = []; // svaki stupac = { naziv: "", kapacitet: "", podaci: [o danima] }
+    this.columns = []; // svaki stupac = { naziv: "", podaci: [o danima] }
     this.render();
   }
 
-  addColumn(naziv, kapacitet) {
+  addColumn(naziv) {
     const newColumn = {
       naziv,
-      kapacitet,
       podaci: Array(31).fill(""), // 31 dan
     };
     this.columns.push(newColumn);
@@ -26,9 +25,7 @@ class DynamicTable extends HTMLElement {
           <thead>
             <tr>
               <th>Dan</th>
-              ${this.columns
-                .map((col) => `<th>${col.naziv} (${col.kapacitet} m³)</th>`)
-                .join("")}
+              ${this.columns.map((col) => `<th>${col.naziv}</th>`).join("")}
             </tr>
           </thead>
           <tbody>
@@ -80,9 +77,8 @@ class DynamicTable extends HTMLElement {
       .querySelector("#add-column-btn")
       .addEventListener("click", () => {
         const naziv = prompt("Naziv bazena:");
-        const kapacitet = prompt("Kapacitet bazena u m³:");
-        if (naziv && kapacitet) {
-          this.addColumn(naziv, kapacitet);
+        if (naziv) {
+          this.addColumn(naziv);
         }
       });
 
