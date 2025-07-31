@@ -34,30 +34,29 @@
     </div>
 
     <script>
-function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+      function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-  fetch("/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, password })
-  })
-    .then(res => {
-      if (res.ok) {
-        
-        window.location.href = "/menu";
-      } else {
-        alert("Pogrešan email ili lozinka");
+        fetch("/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              window.location.href = "/menu";
+            } else {
+              alert("Pogrešan email ili lozinka");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Greška prilikom slanja zahtjeva");
+          });
       }
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Greška prilikom slanja zahtjeva");
-    });
-}
     </script>
   </body>
 </html>

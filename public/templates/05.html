@@ -11,6 +11,8 @@
 
     <link rel="stylesheet" href="../css/global.css" />
 
+    <script type="module" src="../web-components/tablica-05.js"></script>
+
     <script
       type="module"
       src="../web-components/tablica-posjetitelji.js"
@@ -78,55 +80,106 @@
     <div id="sadrzaj">
       <div class="container w-100 my-5">
         <h2 class="text-center">
-          Iz Mlinara vijest stiže da su cijene još niže!
+          Evidencija o izvršenim postupcima za uklanjanje nedostataka
         </h2>
         <div class="row">
           <div class="col-md-8 mx-auto">
             <div class="card h-100">
               <div class="card-body">
                 <form action="/submit" method="POST" class="row g-4">
-                  <div class="col-md-6">
-                    <label class="form-label">Objekt</label>
+                  <div class="col-md-12">
+                    <label class="form-label">Datum</label>
+                    <input
+                      type="date"
+                      name="DATUM"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <p class="text-center mb-0">PARAMETARI ODSTUPANJA</p>
+                  <div class="col-md-4">
+                    <label class="form-label">Mikrobiološki</label>
                     <input
                       type="text"
-                      name="OBJEKT"
+                      name="MB1"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Kemijski</label>
+                    <input
+                      type="text"
+                      name="KEM1"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label">Tehnički nedostatak</label>
+                    <input
+                      type="text"
+                      name="TN"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Poduzete radnje</label>
+                    <input
+                      type="text"
+                      name="RADNJE"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+
+                  <p class="text-center mb-0">KONTROLNO MJERENJE</p>
+                  <div class="col-md-6">
+                    <label class="form-label">Mikrobiološki</label>
+                    <input
+                      type="text"
+                      name="MB2"
                       required
                       class="form-control"
                     />
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">Godina</label>
+                    <label class="form-label">Kemijski</label>
                     <input
-                      type="number"
-                      name="GODINA"
+                      type="text"
+                      name="KEM2"
                       required
                       class="form-control"
-                      placeholder="Unesi godinu"
                     />
                   </div>
-                  <div class="col-12 text-center">
-                    <label class="form-label">Mjesec</label>
-                    <select name="MJESEC" required class="form-select">
-                      <option value="" disabled selected>Odaberi mjesec</option>
-                      <option value="01">Siječanj</option>
-                      <option value="02">Veljača</option>
-                      <option value="03">Ožujak</option>
-                      <option value="04">Travanj</option>
-                      <option value="05">Svibanj</option>
-                      <option value="06">Lipanj</option>
-                      <option value="07">Srpanj</option>
-                      <option value="08">Kolovoz</option>
-                      <option value="09">Rujan</option>
-                      <option value="10">Listopad</option>
-                      <option value="11">Studeni</option>
-                      <option value="12">Prosinac</option>
-                    </select>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Izvršioc</label>
+                    <input
+                      type="text"
+                      name="IZVRSITELJ"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"
+                      >Odgovorna osoba / Voditelj održavanja</label
+                    >
+                    <input
+                      type="text"
+                      name="VODITELJ"
+                      required
+                      class="form-control"
+                    />
                   </div>
 
                   <div class="col-12 text-center">
                     <input
                       type="submit"
-                      value="Napravi novu tablicu"
+                      value="Dodaj redak u tablicu evidencije"
                       class="btn btn-dark"
                     />
                   </div>
@@ -136,8 +189,10 @@
           </div>
         </div>
       </div>
-      <div class="row w-100">
-        <div id="tablice-wrapper" class="container w-100 my-5"></div>
+      <div class="card">
+        <div class="card-body">
+          <dynamic-table id="tablica"></dynamic-table>
+        </div>
       </div>
     </div>
 
@@ -146,39 +201,30 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.querySelector("form");
-      const wrapper = document.getElementById("tablice-wrapper");
+      const tablica = document.getElementById("tablica");
+
+      // Učitaj podatke iz localStorage
+      const spremljeniPodaci = localStorage.getItem("moji_redovi");
+      if (spremljeniPodaci) {
+        const rows = JSON.parse(spremljeniPodaci);
+        rows.forEach((row) => tablica.addRow(row));
+      }
 
       form.addEventListener("submit", (e) => {
-        e.preventDefault(); // da se ne reloada jer je onda sve izbrisano posto se jos nigdje ne sprema
+        e.preventDefault();
 
         const formData = new FormData(form);
-        const objekt = formData.get("OBJEKT");
-        const godina = formData.get("GODINA");
-        const mjesec = formData.get("MJESEC");
+        const data = Object.fromEntries(formData.entries());
 
-        // Nova kartica s tablicom
-        const card = document.createElement("div");
-        card.className = "card w-100 mb-5";
+        // Dodaj red u tablicu
+        tablica.addRow(data);
 
-        card.innerHTML = `
-        <div class="card-body">
-          <p class="text-center fw-bold">Tablica dnevnog broja kupača\nza ${mjesec}/${godina} "${objekt}"</p>
-          <dynamic-table></dynamic-table>
-          <div class="col-12 text-center mt-3">
-            <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
-          </div>
-        </div>
-      `;
+        // Spremi u localStorage
+        const trenutniPodaci = localStorage.getItem("moji_redovi");
+        const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
+        rows.push(data);
+        localStorage.setItem("moji_redovi", JSON.stringify(rows));
 
-        // Gurni na vrh
-        wrapper.prepend(card);
-
-        // Gum za brisanje kartice
-        card.querySelector("remove-button").addEventListener("click", () => {
-          card.remove();
-        });
-
-        // Reset form
         form.reset();
       });
     });

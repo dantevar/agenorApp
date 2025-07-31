@@ -11,10 +11,7 @@
 
     <link rel="stylesheet" href="../css/global.css" />
 
-    <script
-      type="module"
-      src="../web-components/tablica-posjetitelji.js"
-    ></script>
+    <script type="module" src="../web-components/tablica-04.js"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -146,21 +143,13 @@
       const form = document.querySelector("form");
       const wrapper = document.getElementById("tablice-wrapper");
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault(); // da se ne reloada jer je onda sve izbrisano posto se jos nigdje ne sprema
-
-        const formData = new FormData(form);
-        const objekt = formData.get("OBJEKT");
-        const godina = formData.get("GODINA");
-        const mjesec = formData.get("MJESEC");
-
-        // Nova kartica s tablicom
+      function createCard({ objekt, godina, mjesec }) {
         const card = document.createElement("div");
         card.className = "card w-100 mb-5";
 
         card.innerHTML = `
         <div class="card-body">
-          <p class="text-center fw-bold">Tablica dnevnog broja kupača\nza ${mjesec}/${godina} "${objekt}"</p>
+          <p class="text-center fw-bold">Tablica dnevnog broja kupača za ${mjesec}/${godina} "${objekt}"</p>
           <dynamic-table></dynamic-table>
           <div class="col-12 text-center mt-3">
             <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
@@ -168,15 +157,48 @@
         </div>
       `;
 
-        // Gurni na vrh
         wrapper.prepend(card);
 
-        // Gum za brisanje kartice
+        // za brisanje
         card.querySelector("remove-button").addEventListener("click", () => {
           card.remove();
-        });
 
-        // Reset form
+          let tablice = JSON.parse(localStorage.getItem("Tablice")) || [];
+          tablice = tablice.filter(
+            (t) =>
+              !(
+                t.objekt === objekt &&
+                t.godina === godina &&
+                t.mjesec === mjesec
+              )
+          );
+          localStorage.setItem("Tablice", JSON.stringify(tablice));
+        });
+      }
+
+      // 1️⃣ Učitavanje svih spremljenih kartica pri pokretanju stranice
+      const spremljeneTablice =
+        JSON.parse(localStorage.getItem("Tablice")) || [];
+      spremljeneTablice.forEach(createCard);
+
+      // 2️⃣ Dodavanje nove kartice kroz formu
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const objekt = formData.get("OBJEKT");
+        const godina = formData.get("GODINA");
+        const mjesec = formData.get("MJESEC");
+
+        const novaTablica = { objekt, godina, mjesec };
+
+        // Spremi u localStorage
+        let tablice = JSON.parse(localStorage.getItem("Tablice")) || [];
+        tablice.unshift(novaTablica);
+        localStorage.setItem("Tablice", JSON.stringify(tablice));
+
+        createCard(novaTablica);
+
         form.reset();
       });
     });

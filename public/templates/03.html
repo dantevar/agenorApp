@@ -146,37 +146,66 @@
       const form = document.querySelector("form");
       const wrapper = document.getElementById("tablice-wrapper");
 
+      // Pomoćna funkcija za izradu kartice
+      function createCard({ objekt, godina, mjesec }) {
+        const card = document.createElement("div");
+        card.className = "card w-100 mb-5";
+
+        card.innerHTML = `
+            <div class="card-body">
+              <p class="text-center fw-bold">Tablica dnevno dodane vode za ${mjesec}/${godina} "${objekt}"</p>
+              <dynamic-table></dynamic-table>
+              <div class="col-12 text-center mt-3">
+                <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
+              </div>
+            </div>
+          `;
+
+        // Dodaj karticu na vrh
+        wrapper.prepend(card);
+
+        // Event za brisanje
+        card.querySelector("remove-button").addEventListener("click", () => {
+          card.remove();
+
+          // Ukloni iz localStorage-a
+          let tablice = JSON.parse(localStorage.getItem("tablice")) || [];
+          tablice = tablice.filter(
+            (t) =>
+              !(
+                t.objekt === objekt &&
+                t.godina === godina &&
+                t.mjesec === mjesec
+              )
+          );
+          localStorage.setItem("tablice", JSON.stringify(tablice));
+        });
+      }
+
+      // 1️⃣ Prikaži sve spremljene tablice iz localStorage-a pri učitavanju stranice
+      const spremljeneTablice =
+        JSON.parse(localStorage.getItem("tablice")) || [];
+      spremljeneTablice.forEach(createCard);
+
+      // 2️⃣ Dodavanje nove tablice
       form.addEventListener("submit", (e) => {
-        e.preventDefault(); // da se ne reloada jer je onda sve izbrisano posto se jos nigdje ne sprema
+        e.preventDefault();
 
         const formData = new FormData(form);
         const objekt = formData.get("OBJEKT");
         const godina = formData.get("GODINA");
         const mjesec = formData.get("MJESEC");
 
-        // Nova kartica s tablicom
-        const card = document.createElement("div");
-        card.className = "card w-100 mb-5";
+        const novaTablica = { objekt, godina, mjesec };
 
-        card.innerHTML = `
-        <div class="card-body">
-          <p class="text-center fw-bold">Tablica dnevno dodane vode\nza ${mjesec}/${godina} "${objekt}"</p>
-          <dynamic-table></dynamic-table>
-          <div class="col-12 text-center mt-3">
-            <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
-          </div>
-        </div>
-      `;
+        // Spremi u localStorage
+        let tablice = JSON.parse(localStorage.getItem("tablice")) || [];
+        tablice.unshift(novaTablica);
+        localStorage.setItem("tablice", JSON.stringify(tablice));
 
-        // Gurni na vrh
-        wrapper.prepend(card);
+        // Prikaži samo novu karticu
+        createCard(novaTablica);
 
-        // Gum za brisanje kartice
-        card.querySelector("remove-button").addEventListener("click", () => {
-          card.remove();
-        });
-
-        // Reset form
         form.reset();
       });
     });
