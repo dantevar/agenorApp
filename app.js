@@ -11,7 +11,8 @@ const fs = require("fs");
 const app = express();
 const port = 3001;
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/indexRouter');
+const menuRouter = require('./routes/menuRouter');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -20,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 app.use('/', indexRouter);
-
+app.use('/menu', menuRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

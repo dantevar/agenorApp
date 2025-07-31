@@ -11,10 +11,7 @@
 
     <link rel="stylesheet" href="../css/global.css" />
 
-    <script
-      type="module"
-      src="../web-components/tablica-dodavanje-vode.js"
-    ></script>
+    <script type="module" src="../web-components/tablica-03.js"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -146,49 +143,7 @@
       const form = document.querySelector("form");
       const wrapper = document.getElementById("tablice-wrapper");
 
-      // Pomoćna funkcija za izradu kartice
-      function createCard({ objekt, godina, mjesec }) {
-        const card = document.createElement("div");
-        card.className = "card w-100 mb-5";
-
-        card.innerHTML = `
-            <div class="card-body">
-              <p class="text-center fw-bold">Tablica dnevno dodane vode za ${mjesec}/${godina} "${objekt}"</p>
-              <dynamic-table></dynamic-table>
-              <div class="col-12 text-center mt-3">
-                <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
-              </div>
-            </div>
-          `;
-
-        // Dodaj karticu na vrh
-        wrapper.prepend(card);
-
-        // Event za brisanje
-        card.querySelector("remove-button").addEventListener("click", () => {
-          card.remove();
-
-          // Ukloni iz localStorage-a
-          let tablice = JSON.parse(localStorage.getItem("tablice")) || [];
-          tablice = tablice.filter(
-            (t) =>
-              !(
-                t.objekt === objekt &&
-                t.godina === godina &&
-                t.mjesec === mjesec
-              )
-          );
-          localStorage.setItem("tablice", JSON.stringify(tablice));
-        });
-      }
-
-      // 1️⃣ Prikaži sve spremljene tablice iz localStorage-a pri učitavanju stranice
-      const spremljeneTablice =
-        JSON.parse(localStorage.getItem("tablice")) || [];
-      spremljeneTablice.forEach(createCard);
-
-      // 2️⃣ Dodavanje nove tablice
-      form.addEventListener("submit", (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const formData = new FormData(form);
@@ -196,18 +151,65 @@
         const godina = formData.get("GODINA");
         const mjesec = formData.get("MJESEC");
 
-        const novaTablica = { objekt, godina, mjesec };
+        const tablicaData = { objekt, godina, mjesec };
 
-        // Spremi u localStorage
-        let tablice = JSON.parse(localStorage.getItem("tablice")) || [];
-        tablice.unshift(novaTablica);
-        localStorage.setItem("tablice", JSON.stringify(tablice));
+        try {
+          const res = await fetch("/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(tablicaData),
+          });
 
-        // Prikaži samo novu karticu
-        createCard(novaTablica);
+          if (!res.ok) throw new Error("Status: " + res.status);
 
-        form.reset();
+          // Uspješno spremljeno na server:
+          createCard(tablicaData);
+          form.reset();
+        } catch (err) {
+          console.warn("Neuspješno slanje. Spremanje lokalno…", err);
+
+          // Prikaži tablicu odmah (iako je spremljeno lokalno)
+          createCard(tablicaData);
+
+          // Spremi u localStorage za kasnije slanje (nije implementirano)
+          let offlineTablice =
+            JSON.parse(localStorage.getItem("offlineTablice")) || [];
+          offlineTablice.push(tablicaData);
+          localStorage.setItem(
+            "offlineTablice",
+            JSON.stringify(offlineTablice)
+          );
+
+          alert(
+            "Podaci nisu poslani na server jer slanje nije uspjelo. Spremljeni su lokalno."
+          );
+        }
       });
+
+      // Funkcija za kreiranje kartice (koja prikazuje tablicu)
+      function createCard({ objekt, godina, mjesec }) {
+        const card = document.createElement("div");
+        card.className = "card w-100 mb-5";
+
+        card.innerHTML = `
+      <div class="card-body">
+        <p class="text-center fw-bold">
+          Tablica dnevno dodane vode<br>
+          za ${mjesec}/${godina} "${objekt}"
+        </p>
+        <dynamic-table></dynamic-table>
+        <div class="col-12 text-center mt-3">
+          <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
+        </div>
+      </div>
+    `;
+
+        wrapper.prepend(card);
+
+        card.querySelector("remove-button").addEventListener("click", () => {
+          card.remove();
+        });
+      }
     });
   </script>
 </html>
