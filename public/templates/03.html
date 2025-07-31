@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/global.css" />
 
     <script type="module" src="../web-components/tablica-03.js"></script>
+    <script type="module" src="../web-components/izbornik.js"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,53 +22,7 @@
     <div id="wrapper">
       <!-- Sidebar -->
       <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-          <h1>IZBORNIK</h1>
-
-          <li>
-            <a href="01.html">UMJERAVANJE MJERAČA ZA RUČNO MJERENJE</a>
-          </li>
-          <li>
-            <a href="02.html">GODIŠNJE ISPIRANJE PROTOČNOG SUSTAVA BAZENA</a>
-          </li>
-          <li>
-            <a href="03.html">DODANA VODA</a>
-          </li>
-          <li>
-            <a href="04.html">BROJ POSJETITELJA</a>
-          </li>
-          <li>
-            <a href="05.html">UKLANJANJE NEDOSTATAKA</a>
-          </li>
-          <li>
-            <a href="06.html">REZULTATI LABORATORIJSKIH ANALIZA</a>
-          </li>
-          <li>
-            <a href="07.html">ISPIRANJE FILTERA BAZENSKIH KUPALIŠTA</a>
-          </li>
-          <li>
-            <a href="08.html">IZMJERENI POKAZATELJI - SLATKA VODA</a>
-          </li>
-          <li>
-            <a href="09.html">IZMJERENI POKAZATELJI - MORSKA VODA</a>
-          </li>
-          <li>
-            <a href="10.html">ISPIRANJE FILTERA BAZENSKIH KUPALIŠTA</a>
-          </li>
-          <li>
-            <a href="11.html">IZMJERENI POKAZATELJI - HIDROMASAŽNI BAZENI</a>
-          </li>
-          <li>
-            <a href="13.html"
-              >PLAN ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a
-            >
-          </li>
-          <li>
-            <a href="14.html"
-              >EVIDENCIJA ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a
-            >
-          </li>
-        </ul>
+        <nav-menu></nav-menu>
       </div>
       <!-- /#sidebar-wrapper -->
     </div>
@@ -166,12 +121,13 @@
           createCard(tablicaData);
           form.reset();
         } catch (err) {
-          console.warn("Neuspješno slanje. Spremanje lokalno…", err);
-
-          // Prikaži tablicu odmah (iako je spremljeno lokalno)
+          console.warn(
+            "Neuspješno slanje, ali podaci dodani u tablicu. Maknuti će se nakon refreshanja stranice",
+            err
+          );
           createCard(tablicaData);
 
-          // Spremi u localStorage za kasnije slanje (nije implementirano)
+          // Spremi u localStorage za kasnije slanje (kasnije slanje nije implementirano)
           let offlineTablice =
             JSON.parse(localStorage.getItem("offlineTablice")) || [];
           offlineTablice.push(tablicaData);
@@ -180,9 +136,7 @@
             JSON.stringify(offlineTablice)
           );
 
-          alert(
-            "Podaci nisu poslani na server jer slanje nije uspjelo. Spremljeni su lokalno."
-          );
+          alert("Podaci nisu poslani na server jer slanje nije uspjelo.");
         }
       });
 
