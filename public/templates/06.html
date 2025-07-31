@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Bundle JS (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="../css/global.css" />
+
+    <script type="module" src="../web-components/tablica-05.js"></script>
+    <script type="module" src="../web-components/izbornik.js"></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <nav-menu></nav-menu>
+      </div>
+      <!-- /#sidebar-wrapper -->
+    </div>
+    <!-- /#na stranici -->
+    <div id="sadrzaj">
+      <div class="container w-100 my-5">
+        <h2 class="text-center"></h2>
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="card h-100">
+              <div class="card-body">
+                <form action="/submit" method="POST" class="row g-4">
+                  <div class="col-md-12">
+                    <label class="form-label">Datum</label>
+                    <input
+                      type="date"
+                      name="DATUM"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <p class="text-center mb-0">PARAMETARI ODSTUPANJA</p>
+                  <div class="col-md-4">
+                    <label class="form-label">Mikrobiološki</label>
+                    <input
+                      type="text"
+                      name="MB1"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Kemijski</label>
+                    <input
+                      type="text"
+                      name="KEM1"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label">Tehnički nedostatak</label>
+                    <input
+                      type="text"
+                      name="TN"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Poduzete radnje</label>
+                    <input
+                      type="text"
+                      name="RADNJE"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+
+                  <p class="text-center mb-0">KONTROLNO MJERENJE</p>
+                  <div class="col-md-6">
+                    <label class="form-label">Mikrobiološki</label>
+                    <input
+                      type="text"
+                      name="MB2"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Kemijski</label>
+                    <input
+                      type="text"
+                      name="KEM2"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Izvršioc</label>
+                    <input
+                      type="text"
+                      name="IZVRSITELJ"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"
+                      >Odgovorna osoba / Voditelj održavanja</label
+                    >
+                    <input
+                      type="text"
+                      name="VODITELJ"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="col-12 text-center">
+                    <input
+                      type="submit"
+                      value="Dodaj redak u tablicu evidencije"
+                      class="btn btn-dark"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <dynamic-table id="tablica"></dynamic-table>
+        </div>
+      </div>
+    </div>
+
+    <!-- /#wrapper -->
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector("form");
+      const tablica = document.getElementById("tablica");
+
+      // Učitaj podatke iz localStorage
+      const spremljeniPodaci = localStorage.getItem("moji_redovi");
+      if (spremljeniPodaci) {
+        const rows = JSON.parse(spremljeniPodaci);
+        rows.forEach((row) => tablica.addRow(row));
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Dodaj red u tablicu
+        tablica.addRow(data);
+
+        // Spremi u localStorage
+        const trenutniPodaci = localStorage.getItem("moji_redovi");
+        const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
+        rows.push(data);
+        localStorage.setItem("moji_redovi", JSON.stringify(rows));
+
+        form.reset();
+      });
+    });
+  </script>
+</html>
