@@ -13,6 +13,7 @@ const port = 3001;
 
 const indexRouter = require('./routes/indexRouter');
 const menuRouter = require('./routes/menuRouter');
+const filterRouter = require('./routes/filters');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 app.use('/menu', menuRouter);
+app.use('/filters', filterRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
