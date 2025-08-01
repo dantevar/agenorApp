@@ -19,6 +19,42 @@ router.get("/all", async (req, res) => {
 });
 
 
+router.get("/filters", async (req, res) => {
+    const objectId = req.query.object_id;
+    const month = req.query.month;
+
+    try {
+        result = await db.query(
+        "SELECT * FROM filters WHERE object_id = $1 and extract(month from log_date) as month = $2",
+        [objectId], )
+        res.json(result.rows)
+
+
+    } catch (err) {
+        console.error("Greška :", err);
+        res.status(500).send("Greška");
+    }
+});
+
+
+router.get("/objects", async (req, res) => {
+    const objectId = req.query.object_id;
+    const month = req.query.month;
+
+    try {
+        result = await db.query(
+        "SELECT * FROM objects")
+        res.json(result.rows)
+
+
+    } catch (err) {
+        console.error("Greška :", err);
+        res.status(500).send("Greška");
+    }
+});
+
+
+
 // router.post("menu/submit", async (req, res) => {
 //   const { objekt, godina, mjesec } = req.body;
 

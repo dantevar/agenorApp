@@ -42,11 +42,11 @@
         <div style="font-size: large; display: inline-flex; gap: 3rem; align-items:stretch; justify-content: space-between;">
 
             <div class="col-md-4">
-              <label for="objektSelect" class="form-label"
+              <label class="form-label"
                 >Objekt:</label
               >
               <select
-                id="objektSelect"
+                id="objectSelect"
                 name="OBJEKT"
                 class="form-select"
                 required
@@ -58,7 +58,7 @@
 
 
             <div class="col-md-4">
-              <label for="objektSelect" class="form-label"
+              <label class="form-label"
                 >Mjesec:</label
               >
               <select
@@ -67,7 +67,7 @@
                 class="form-select"
                 required
               >
-                <option value="" selected disabled>Odaberi objekt</option>
+                <option value="" selected disabled>Odaberi mjesec</option>
                 <!-- Opcije će se učitati dinamički -->
               </select>
             </div>
@@ -129,21 +129,47 @@
         });
 
 
-    fetch("http://localhost:3001/objects")
-      .then((res) => res.json())
-      .then((data) => console.log("Objekti iz frontenda:", data))
-      .catch((err) => console.error(err));
+    // TODO change this url to just /objects
+    fetch("http://localhost:3001/filters/objects").then(response => {
+        if (!response.ok) throw new Error("Greška prilikom dohvata podataka");
+        return response.json();
+    })
+    .then(data => {
+            console.log(data)
+            const objSelect = document.getElementById("objectSelect")
+
+            data.forEach((obj) =>{
+              const option = document.createElement("option");
+              option.value = obj.value;
+              option.textContent = obj.name;
+              objSelect.appendChild(option);
+          })
+        });
+
+    
+          const monSelect = document.getElementById("monthSelect")
+        
+            Object.entries(mjeseci).forEach((obj) =>{
+              const option = document.createElement("option");
+              option.value = obj[1];
+              option.textContent = obj[1];
+              monSelect.appendChild(option);
+          })
+  
 
 
-      
-    applyQuery(() => {
+
+
+    function applyQuery(){
 
       obj = document.getElementById("objectSelect").value;
-      fetch("http://localhost:3001/filters/object_name=${encodeURIComponent(obj)}")
+      month = document.getElementById("monthSelect").value;
+      console.log(obj, month)
+      fetch("http://localhost:3001/filters?object_name=${encodeURIComponent(obj)}&month={encodeURIComponent(month)}")
 
     }
 
-  )
+  
 
     document.addEventListener("DOMContentLoaded", () => {
 
