@@ -49,4 +49,21 @@ router.get("/pools/:objectId", async (req, res) => {
   }
 });
 
+router.post("/cleaning_logs", async (req, res) => {
+  const { object_id, pool_id, timeStamp, cleaned_area, cleaner } = req.body;
+
+  try {
+    // Ubaci cleaning log
+    await db.query(
+      "INSERT INTO users (object_id, pool_id, timeStamp, cleaned_area, cleaner) VALUES ($1, $2, $3, $4, $5)",
+      [object_id, pool_id, timeStamp, cleaned_area, cleaner]
+    );
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send("Greška na serveru prilikom pokušaja unsa cleaning log-a");
+  }
+});
+
 module.exports = router;
