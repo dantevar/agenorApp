@@ -144,7 +144,12 @@
         const objekt = formData.get("OBJEKT");
         const godina = formData.get("GODINA");
         const mjesec = formData.get("MJESEC");
-
+        
+        // check for invalid year
+        if (godina < 1999) {
+          alert("Neispravna godina!")
+          return;
+        }
         const novaTablica = { objekt, godina, mjesec };
 
         // Spremi u localStorage
