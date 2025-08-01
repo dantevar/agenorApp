@@ -16,7 +16,7 @@ class NavMenu extends HTMLElement {
         <li><a href="../templates/07.html">ISPIRANJE FILTERA BAZENSKIH KUPALIŠTA</a></li>
         <li><a href="../templates/08.html">IZMJERENI POKAZATELJI - SLATKA VODA</a></li>
         <li><a href="../templates/09.html">IZMJERENI POKAZATELJI - MORSKA VODA</a></li>
-        <li><a href="../templates/10.html">ISPIRANJE FILTERA BAZENSKIH KUPALIŠTA</a></li>
+        <li><a href="../templates/10.html">ISPIRANJE FILTARA BAZENSKIH KUPALIŠTA</a></li>
         <li><a href="../templates/11.html">IZMJERENI POKAZATELJI - HIDROMASAŽNI BAZENI</a></li>
         <li><a href="../templates/13.html">PLAN ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
         <li><a href="../templates/14.html">EVIDENCIJA ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Bundle JS (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="../css/global.css" />
+
+    <script type="module" src="../web-components/tablica-07.js"></script>
+    <script type="module" src="../web-components/izbornik.js"></script>
+
+    <script
+      type="module"
+      src="../web-components/tablica-posjetitelji.js"
+    ></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <nav-menu></nav-menu>
+      </div>
+      <!-- /#sidebar-wrapper -->
+    </div>
+    <!-- /#na stranici -->
+    <div id="sadrzaj">
+      <div class="container w-100 my-5">
+        <h2 class="text-center">
+          Ispiranje filtara bazenskih kupališta
+        </h2>
+
+        <div style="font-size: large; display: inline-flex; gap: 3rem; align-items:stretch; justify-content: space-between;">
+
+            <p id="objekt">Objekt: </p>
+            <p id="filter">Filter: </p>
+
+        </div>
+        <hr>
+
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="card h-100">
+              <div class="card-body">
+                <form action="/submit" method="POST" class="row g-4">
+                  <div class="col-md-12">
+                    <label class="form-label">Napomena</label>
+                    <!-- TODO: trebao/mogao  bi biti izbornik -->
+                    <input
+                      type="text"
+                      name="NAPOMENA"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Čišćenje izvršio</label>
+                    <input
+                      type="text"
+                      name="OSOBA"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-12 text-center">
+                    <input
+                      type="submit"
+                      value="Unesi"
+                      class="btn btn-dark"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <dynamic-table id="tablica"></dynamic-table>
+        </div>
+      </div>
+    </div>
+
+    <!-- /#wrapper -->
+  </body>
+  <script>
+      const form = document.querySelector("form");
+    // document.addEventListener("DOMContentLoaded", () => {
+    //   const tablica = document.getElementById("tablica");
+
+    //   // Učitaj podatke iz localStorage
+    //   const spremljeniPodaci = localStorage.getItem("moji_redovi");
+    //   if (spremljeniPodaci) {
+    //     const rows = JSON.parse(spremljeniPodaci);
+    //     rows.forEach((row) => tablica.addRow(row));
+    //   }
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        
+    }) 
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        // time is recorded as time of entry 
+        var now = new Date()
+        data.DATUM = now.toLocaleDateString().toString()
+        if (data.NAPOMENA == "") data.NAPOMENA = "/"
+        // Dodaj red u tablicu
+        tablica.addRow(data);
+
+        // Spremi u localStorage
+        const trenutniPodaci = localStorage.getItem("moji_redovi");
+        const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
+        rows.push(data);
+        localStorage.setItem("moji_redovi", JSON.stringify(rows));
+
+        form.reset();
+      });
+    // });
+  </script>
+</html>
