@@ -146,7 +146,7 @@
   </body>
   <script>
     // Dohvaćanje podataka o objektima i bazenima
-    fetch("http://localhost:3001/pools/object")
+    /*fetch("http://localhost:3001/pools/object")
       .then((res) => res.json())
       .then((data) => console.log("Objekti iz frontenda:", data))
       .catch((err) => console.error(err));
@@ -158,7 +158,7 @@
       .then((res) => res.json())
       .then((data) => console.log("Objekti iz frontenda:", data))
       .catch((err) => console.error(err));
-    // *****************************************************
+    */ // *****************************************************
     // Event listeneri za dropdownove
     document.addEventListener("DOMContentLoaded", () => {
       const objektSelect = document.getElementById("objektSelect");
@@ -178,15 +178,15 @@
         })
         .catch((err) => console.error(err));
 
-      console.log(objektSelect);
+      //console.log(objektSelect);
       // Na promjenu objekta, učitaj bazene
       objektSelect.addEventListener("change", () => {
         const selectedObjektId = objektSelect.value;
-        console.log(
+        /*console.log(
           "Ovo je id objekta za koji se raže bazeni: ",
           objektSelect.value
         );
-
+*/
         if (!selectedObjektId) {
           bazenSelect.innerHTML =
             '<option value="" disabled selected>Odaberi bazen</option>';
@@ -200,14 +200,14 @@
         fetch(`http://localhost:3001/pools/pools/${selectedObjektId}`)
           .then((res) => res.json())
           .then((bazeni) => {
-            console.log("...a ovo su njegovi bazeni: ", bazeni);
+            //console.log("...a ovo su njegovi bazeni: ", bazeni);
             bazenSelect.innerHTML =
               '<option value="" disabled selected>Odaberi bazen</option>';
             bazeni.forEach((bazen) => {
               const option = document.createElement("option");
               option.value = bazen.pool_id;
               option.textContent = bazen.pool_name;
-              console.log(bazen.pool_name);
+              // console.log(bazen.pool_name);
 
               bazenSelect.appendChild(option);
             });
@@ -319,6 +319,29 @@
 
     // });
 
+    const tablica = document.getElementById("tablica");
+
+    // Funkcija za dohvat i prikaz cleaning logova
+    function ucitajCleaningLogove() {
+      fetch("http://localhost:3001/pools/cleaning_logs")
+        .then((res) => res.json())
+        .then((data) => {
+          // Očisti postojeće retke u tablici (ako ima metoda za to, npr. reset ili izravno resetiraj rows)
+          tablica.rows = [];
+          data.forEach((row) => {
+            tablica.addRow(row);
+          });
+        })
+        .catch((err) => {
+          console.error("Greška pri dohvaćanju cleaning logova:", err);
+        });
+    }
+
+    // Pozovi odmah po učitavanju stranice ili nakon unosa novog zapisa
+    document.addEventListener("DOMContentLoaded", () => {
+      ucitajCleaningLogove();
+    });
+
     // ******************** POST ***************************
 
     function posalji() {
@@ -336,7 +359,7 @@
 
       // Uzmi dan i vrijeme iz sada
       const dan = now.getDate();
-      const sati = now.getHours() + 2;
+      const sati = now.getHours() + 2; // ovo je dodano 2 jer je vrijeme s nultog meridijana...
       const minute = now.getMinutes();
 
       const datum = new Date(godina, mjesec - 1, dan, sati, minute);
@@ -349,6 +372,7 @@
         cleaner: data.OSOBA,
       };
 
+      console.log("POST", to_databese);
       // Pošalji POST request na backend
       fetch("http://localhost:3001/pools/cleaning_logs", {
         method: "POST",

@@ -63,4 +63,27 @@ router.post("/cleaning_logs", async (req, res) => {
   }
 });
 
+// GET svi zapisi čišćenja (cleaning_logs) - ... za prikaz u tablici, nije implementirano na frontendu
+router.get("/cleaning_logs", async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT * from cleaning_logs
+    `);
+
+    // Mapiraj podatke za frontend
+    const cleanedData = result.rows.map((row) => ({
+      DAN: new Date(row.cleaning_time).getDay(),
+      PROSTOR: row.cleaned_area,
+      VRIJEME: new Date(row.cleaning_time).toLocaleString(), // ili formatiraj kako želiš
+      OSOBA: row.cleaner,
+      BAZEN: row.pool_name,
+    }));
+
+    res.json(cleanedData);
+  } catch (err) {
+    console.error("Greška pri dohvaćanju cleaning logova:", err);
+    res.status(500).send("Greška pri dohvaćanju cleaning logova");
+  }
+});
+
 module.exports = router;
