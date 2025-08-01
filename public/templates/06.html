@@ -10,9 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <link rel="stylesheet" href="../css/global.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-    <script type="module" src="../web-components/tablica-05.js"></script>
     <script type="module" src="../web-components/izbornik.js"></script>
+    <script type="module" src="../web-components/generiraj-pdf-06"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,14 +31,24 @@
     <!-- /#na stranici -->
     <div id="sadrzaj">
       <div class="container w-100 my-5">
-        <h2 class="text-center"></h2>
-        <div class="row">
-          <div class="col-md-8 mx-auto">
-            <div class="card h-100">
+        <h2 class="text-center">Rezultati laboratorijskih analiza</h2>
+        <div class="container my-5">
+          <div class="col-12 mx-auto">
+            <div class="card">
               <div class="card-body">
+                <!-- /#Forma za unos-->
                 <form action="/submit" method="POST" class="row g-4">
-                  <div class="col-md-12">
-                    <label class="form-label">Datum</label>
+                  <div class="col-md-6">
+                    <label class="form-label">NAZIV BAZENA</label>
+                    <input
+                      type="text"
+                      name="NAZIV"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">DATUM</label>
                     <input
                       type="date"
                       name="DATUM"
@@ -44,92 +56,195 @@
                       class="form-control"
                     />
                   </div>
-                  <p class="text-center mb-0">PARAMETARI ODSTUPANJA</p>
-                  <div class="col-md-4">
-                    <label class="form-label">Mikrobiološki</label>
+                  <!-- /#Htjela bi da se primjeni na sve-->
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label">Boja - max 20 Pt/Co skale</label>
+
+                    <label for="vrijednost1">Vrijednost</label>
                     <input
                       type="text"
-                      name="MB1"
-                      required
-                      class="form-control"
+                      id="vrijednost1"
+                      class="form-control mb-2"
                     />
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">Kemijski</label>
-                    <input
-                      type="text"
-                      name="KEM1"
-                      required
-                      class="form-control"
-                    />
+
+                    <label for="jl1">J/L</label>
+                    <input type="number" id="jl1" class="form-control" />
                   </div>
 
-                  <div class="col-md-4">
-                    <label class="form-label">Tehnički nedostatak</label>
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label">Mutnoća - max 1,0/NTU</label>
+
+                    <label for="vrijednost2">Vrijednost</label>
                     <input
                       type="text"
-                      name="TN"
-                      required
-                      class="form-control"
+                      id="vrijednost2"
+                      class="form-control mb-2"
                     />
-                  </div>
-                  <div class="col-md-12">
-                    <label class="form-label">Poduzete radnje</label>
-                    <input
-                      type="text"
-                      name="RADNJE"
-                      required
-                      class="form-control"
-                    />
+
+                    <label for="jl2">J/L</label>
+                    <input type="number" id="jl2" class="form-control" />
                   </div>
 
-                  <p class="text-center mb-0">KONTROLNO MJERENJE</p>
-                  <div class="col-md-6">
-                    <label class="form-label">Mikrobiološki</label>
-                    <input
-                      type="text"
-                      name="MB2"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Kemijski</label>
-                    <input
-                      type="text"
-                      name="KEM2"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label">Izvršioc</label>
-                    <input
-                      type="text"
-                      name="IZVRSITELJ"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-md-6">
+                  <div class="col-md-3 d-flex flex-column">
                     <label class="form-label"
-                      >Odgovorna osoba / Voditelj održavanja</label
+                      >Koncentracija vodikovih iona pH 6,5-7,8</label
                     >
+
+                    <label for="vrijednost3">Vrijednost</label>
                     <input
                       type="text"
-                      name="VODITELJ"
-                      required
-                      class="form-control"
+                      id="vrijednost3"
+                      class="form-control mb-2"
                     />
+
+                    <label for="jl3">J/L</label>
+                    <input type="number" id="jl3" class="form-control" />
                   </div>
 
-                  <div class="col-12 text-center">
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label"
+                      >Električna vodljivost μS/cm</label
+                    >
+
+                    <label for="vrijednost4">Vrijednost</label>
                     <input
-                      type="submit"
-                      value="Dodaj redak u tablicu evidencije"
-                      class="btn btn-dark"
+                      type="text"
+                      id="vrijednost4"
+                      class="form-control mb-2"
                     />
+
+                    <label for="jl4">J/L</label>
+                    <input type="number" id="jl4" class="form-control" />
+                  </div>
+
+                  <!-- drugi red -->
+                  <div class="col-md-12 d-flex flex-column">
+                    <label class="form-label">
+                      Redoks potencijal prema Ag/AgCl, 3,5 M KCl rezultat
+                      izražen prema HSE.<br />
+                      Slatka voda pH 6,5-7,3 max > 750;<br />
+                      Slatka voda pH 7,3-7,8 max > 770;<br />
+                      Morska voda pH 6,5-7,3 max > 700;<br />
+                      Morska voda pH 7,3-7,8 max > 720;
+                    </label>
+
+                    <label for="vrijednost5">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost5"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl5">J/L</label>
+                    <input type="number" id="jl5" class="form-control" />
+                  </div>
+
+                  <!-- treći red -->
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label"
+                      >Slobodni klor 0,2-1,00 mg/L</label
+                    >
+
+                    <label for="vrijednost6">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost6"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl6">J/L</label>
+                    <input type="number" id="jl6" class="form-control" />
+                  </div>
+
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label">Trihalometani max 100 μg/L</label>
+
+                    <label for="vrijednost7">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost7"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl7">J/L</label>
+                    <input type="number" id="jl7" class="form-control" />
+                  </div>
+
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label"
+                      >Pseudomonas aerug. - max < 1 / (cfu/100ml)</label
+                    >
+
+                    <label for="vrijednost8">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost8"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl8">J/L</label>
+                    <input type="number" id="jl8" class="form-control" />
+                  </div>
+
+                  <!-- četvrti redak -->
+
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label"
+                      >Legionella pneumophila - max < 1 / (cfu/100ml)</label
+                    >
+
+                    <label for="vrijednost9">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost9"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl9">J/L</label>
+                    <input type="number" id="jl9" class="form-control" />
+                  </div>
+
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label"
+                      >Staphylococcus aureus - max 100 / (cfu/100ml)</label
+                    >
+
+                    <label for="vrijednost10">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost10"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl10">J/L</label>
+                    <input type="number" id="jl10" class="form-control" />
+                  </div>
+
+                  <div class="col-md-3 d-flex flex-column">
+                    <label class="form-label"
+                      >Ukupno aerobne bakterije - - max 200 / (cfu/ml)</label
+                    >
+
+                    <label for="vrijednost11">Vrijednost</label>
+                    <input
+                      type="text"
+                      id="vrijednost11"
+                      class="form-control mb-2"
+                    />
+
+                    <label for="jl11">J/L</label>
+                    <input type="number" id="jl11" class="form-control" />
+                  </div>
+                  <!-- Gumb -->
+
+                  <div class="col-12 text-center mt-4">
+                    <button
+                      type="button"
+                      id="generirajPDF"
+                      class="btn btn-dark col-4 ms-2 fw-semibold"
+                    >
+                      Generiraj PDF
+                    </button>
                   </div>
                 </form>
               </div>
@@ -137,44 +252,125 @@
           </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-body">
-          <dynamic-table id="tablica"></dynamic-table>
-        </div>
-      </div>
     </div>
-
-    <!-- /#wrapper -->
   </body>
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.querySelector("form");
-      const tablica = document.getElementById("tablica");
+    // OSNOVNA SINTAKSA:
+    // doc.text(text, x, y, options);
 
-      // Učitaj podatke iz localStorage
-      const spremljeniPodaci = localStorage.getItem("moji_redovi");
-      if (spremljeniPodaci) {
-        const rows = JSON.parse(spremljeniPodaci);
-        rows.forEach((row) => tablica.addRow(row));
-      }
+    const marginLeft = 20;
+    const marginRight = 20;
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
+    const marginTop = 20;
+    let y = marginTop;
+    let INC = 10;
 
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+    document.getElementById("generirajPDF").addEventListener("click", () => {
+      const data = {
+        NAZIV: document.querySelector('input[name="NAZIV"]').value,
+        DATUM: document.querySelector('input[name="DATUM"]').value,
+        vrijednost1: document.getElementById("vrijednost1").value,
+        vrijednost2: document.getElementById("vrijednost2").value,
+        vrijednost3: document.getElementById("vrijednost3").value,
+        vrijednost4: document.getElementById("vrijednost4").value,
+        vrijednost5: document.getElementById("vrijednost5").value,
+        vrijednost6: document.getElementById("vrijednost6").value,
+        vrijednost7: document.getElementById("vrijednost7").value,
+        vrijednost8: document.getElementById("vrijednost8").value,
+        vrijednost9: document.getElementById("vrijednost9").value,
+        vrijednost10: document.getElementById("vrijednost10").value,
+        vrijednost11: document.getElementById("vrijednost11").value,
+        jl1: document.getElementById("jl1").value,
+        jl2: document.getElementById("jl2").value,
+        jl3: document.getElementById("jl3").value,
+        jl4: document.getElementById("jl4").value,
+        jl5: document.getElementById("jl5").value,
+        jl6: document.getElementById("jl6").value,
+        jl7: document.getElementById("jl7").value,
+        jl8: document.getElementById("jl8").value,
+        jl9: document.getElementById("jl9").value,
+        jl10: document.getElementById("jl10").value,
+        jl11: document.getElementById("jl11").value,
+      };
 
-        // Dodaj red u tablicu
-        tablica.addRow(data);
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
 
-        // Spremi u localStorage
-        const trenutniPodaci = localStorage.getItem("moji_redovi");
-        const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
-        rows.push(data);
-        localStorage.setItem("moji_redovi", JSON.stringify(rows));
+      doc.setFontSize(12);
+      doc.text(`Naziv bazena: ${data.NAZIV}`, marginLeft, y);
+      y += INC;
+      doc.text(`Datum: ${data.DATUM}`, marginLeft, y);
+      y += INC;
 
-        form.reset();
+      doc.setFontSize(14);
+      doc.text("REZULTATI LABORATIORIJSKIH ANALIZA", pageWidth / 2, y, {
+        align: "center",
       });
+      doc.setFontSize(10);
+      y += INC * 2;
+
+      const rows = [
+        ["Boja - max 20 Pt/Co skale", data.vrijednost1, data.jl1],
+        ["Mutnoca - max 1,0/NTU", data.vrijednost2, data.jl2],
+        ["Koncentracija vodikovih iona pH 6,5-7,8", data.vrijednost3, data.jl3],
+        [
+          "Redoks potencijal prema Ag/AgCl, 3,5 M KCl rezultat izražen prema HSE.\nSlatka voda pH 6,5-7,3 max > 750;\nSlatka voda pH 7,3-7,8 max > 770;\nMorska voda pH 6,5-7,3 max > 700;\nMorska voda pH 7,3-7,8 max > 720;",
+          data.vrijednost5,
+          data.jl5,
+        ],
+        ["Elektricna vodljivost miS/cm", data.vrijednost4, data.jl4],
+        ["Slobodni klor 0,2-1,00 mg/L", data.vrijednost6, data.jl6],
+        ["Trihalometani max 100 mig/L", data.vrijednost7, data.jl7],
+        [
+          "Pseudomonas aerug. - max < 1 / (cfu/100ml)",
+          data.vrijednost8,
+          data.jl8,
+        ],
+        [
+          "Legionella pneumophila - max < 1 / (cfu/100ml)",
+          data.vrijednost9,
+          data.jl9,
+        ],
+        [
+          "Staphylococcus aureus - max 100 / (cfu/100ml)",
+          data.vrijednost10,
+          data.jl10,
+        ],
+        [
+          "Ukupno aerobne bakterije - - max 200 / (cfu/ml)",
+          data.vrijednost11,
+          data.jl11,
+        ],
+      ];
+
+      doc.autoTable({
+        head: [["Parametar", "Vrijednost", "J/L"]],
+        body: rows,
+        margin: { top: y, left: marginLeft, right: marginLeft },
+      });
+
+      doc.setFontSize(10);
+
+      y = doc.lastAutoTable.finalY + 10;
+
+      const maxWidth = pageWidth - marginLeft - marginRight;
+
+      const paragraf = `Sukladno Cl. 23.,24.,25.,27.i 29. Pravilnika (NN 59/20), uzorkovanje bazenske vode vrsi se dva puta mjesecno (vanjski bazeni) i jednom mjesecno (unutarnji). U slucaju mikrobioloske necistoce ponavljaju se svi parametri, u slucaju kemijskog oneciscenja samo neispravni pokazatelji. Rezultate je potrebno upisati u tablicu, izvjesiti na bazenu i cuvati 3 godine.`;
+
+      const wrappedText = doc.splitTextToSize(paragraf, maxWidth);
+      doc.text(wrappedText, marginLeft, y);
+
+      y += 30;
+      doc.text(
+        `Odgovorna osoba za rad bazenskog kupališta.\n\n\n\n` +
+          `_______________________________________`,
+        pageWidth - marginRight,
+        y,
+        { maxWidth: maxWidth, align: "right" }
+      );
+      doc.save("analiza_bazena.pdf");
     });
   </script>
 </html>

@@ -29,10 +29,44 @@
       <div id="sidebar-wrapper">
         <nav-menu></nav-menu>
       </div>
-      <!-- /#sidebar-wrapper -->
+      <!-- /#sidebar-wrapper - kraj -->
     </div>
+
     <!-- /#na stranici -->
-    <div id="sadrzaj"></div>
+    <div id="sadrzaj">
+      <div class="container w-100 my-5">
+        <h2 class="text-center">Naslov</h2>
+        <div class="container my-5">
+          <div class="col-md-8 mx-auto">
+            <!-- /#širina kartice može biti veća npr col-12 mx-auto -->
+            <div class="card">
+              <div class="card-body">
+                <!-- /#Forma za unos-->
+                <form action="/submit" method="POST" class="row g-4">
+                  <div class="col-md-12">
+                    <label class="form-label">Unos</label>
+                    <input
+                      type="text"
+                      name="TEXT"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <!-- /#Gumb-->
+                  <div class="col-12 text-center">
+                    <input type="submit" value="Dodaj" class="btn btn-dark" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">...</div>
+      </div>
+    </div>
+    <!-- /#wrapper - kraj -->
   </body>
 
   <script></script>

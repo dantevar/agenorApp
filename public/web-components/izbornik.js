@@ -12,7 +12,7 @@ class NavMenu extends HTMLElement {
         <li><a href="../templates/03.html">DODANA VODA</a></li>
         <li><a href="../templates/04.html">BROJ POSJETITELJA</a></li>
         <li><a href="../templates/05.html">UKLANJANJE NEDOSTATAKA</a></li>
-        <li><a href="../templates/s06.html">REZULTATI LABORATORIJSKIH ANALIZA</a></li>
+        <li><a href="../templates/06.html">REZULTATI LABORATORIJSKIH ANALIZA</a></li>
         <li><a href="../templates/07.html">ISPIRANJE FILTERA BAZENSKIH KUPALIŠTA</a></li>
         <li><a href="../templates/08.html">IZMJERENI POKAZATELJI - SLATKA VODA</a></li>
         <li><a href="../templates/09.html">IZMJERENI POKAZATELJI - MORSKA VODA</a></li>
