@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path"); 
-const db = require('../db/index');
-
+const path = require("path");
+const db = require("../db/index");
 
 router.get("/", (req, res) => {
-    res.sendFile("index.html", { root: path.join(__dirname, "../public") });
+  res.sendFile("index.html", { root: path.join(__dirname, "../public") });
 });
-
-
 
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
@@ -18,7 +15,6 @@ router.post("/", async (req, res) => {
       "SELECT * FROM users WHERE email = $1 AND password = $2",
       [email, password]
     );
-
 
     if (result.rows.length > 0) {
       res.status(200).send("Login uspješan ");
@@ -47,7 +43,9 @@ router.post("/signup", async (req, res) => {
     `);
 
     // Provjera postoji li korisnik
-    const check = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+    const check = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
     if (check.rows.length > 0) {
       return res.status(400).send("Korisnik već postoji");
     }
@@ -64,7 +62,5 @@ router.post("/signup", async (req, res) => {
     res.status(500).send("Greška na serveru");
   }
 });
-
-
 
 module.exports = router;
