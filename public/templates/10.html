@@ -38,54 +38,48 @@
         <h2 class="text-center">
           Zapisnik o ispiranju filtara bazenskih kupališta
         </h2>
-
+        <p> Pregled podataka prema odabranim kriterijima:</p>
         <div style="font-size: large; display: inline-flex; gap: 3rem; align-items:stretch; justify-content: space-between;">
 
-            <p id="objekt">Objekt: </p>
-            <p id="bazen">Bazen: </p>
-            <p id="mjesec">Mjesec: </p>
+            <div class="col-md-4">
+              <label for="objektSelect" class="form-label"
+                >Objekt:</label
+              >
+              <select
+                id="objektSelect"
+                name="OBJEKT"
+                class="form-select"
+                required
+              >
+                <option value="" selected disabled>Odaberi objekt</option>
+                <!-- Opcije će se učitati dinamički -->
+              </select>
+            </div>
+
+
+            <div class="col-md-4">
+              <label for="objektSelect" class="form-label"
+                >Mjesec:</label
+              >
+              <select
+                id="monthSelect"
+                name="MONTH"
+                class="form-select"
+                required
+              >
+                <option value="" selected disabled>Odaberi objekt</option>
+                <!-- Opcije će se učitati dinamički -->
+              </select>
+            </div>
+
+            <button onsubmit="applyQuery">
+              Prikaži
+            </button>
 
         </div>
 
         <hr>
 
-        <div class="row">
-          <div class="col-md-8 mx-auto">
-            <div class="card h-100">
-              <div class="card-body">
-                <!-- <form action="/submit" method="POST" class="row g-4">
-                  <div class="col-md-12">
-                    <label class="form-label"></label>
-                    
-                    <input
-                      type="text"
-                      name="PROSTOR"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-md-12">
-                    <label class="form-label">Čišćenje izvršio</label>
-                    <input
-                      type="text"
-                      name="OSOBA"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-12 text-center">
-                    <input
-                      type="submit"
-                      value="Unesi"
-                      class="btn btn-dark"
-                    />
-                  </div>
-                </form> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="card">
         <div class="card-body">
           <dynamic-table id="tablica"></dynamic-table>
@@ -122,19 +116,37 @@
         12: "prosinac"
     };
 
+    const tablica = document.getElementById("tablica");
+
+    fetch("http://localhost:3001/filters/all").then(response => {
+        if (!response.ok) throw new Error("Greška prilikom dohvata podataka");
+        return response.json();
+    })
+    .then(data => {
+            console.log(data)
+            data.forEach((row) => tablica.addRow(row));
+            tablica.render()
+        });
+
+
+    fetch("http://localhost:3001/objects")
+      .then((res) => res.json())
+      .then((data) => console.log("Objekti iz frontenda:", data))
+      .catch((err) => console.error(err));
+
+
+      
+    applyQuery(() => {
+
+      obj = document.getElementById("objectSelect").value;
+      fetch("http://localhost:3001/filters/object_name=${encodeURIComponent(obj)}")
+
+    }
+
+  )
+
     document.addEventListener("DOMContentLoaded", () => {
 
-        const tablica = document.getElementById("tablica");
-        fetch("http://localhost:3001/filters/all").then(response => {
-            if (!response.ok) throw new Error("Greška prilikom dohvata podataka");
-            return response.json();
-        })
-        .then(data => {
-                console.log(data)
-                const rows = JSON.parse(data);
-                console.log(rows)
-                rows.forEach((row) => tablica.addRow(row));
-            });
         })
         
         tablica.rows;

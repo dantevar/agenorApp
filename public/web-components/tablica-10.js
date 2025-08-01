@@ -7,8 +7,9 @@ class DynamicTable extends HTMLElement {
   }
 
   addRow(data) {
+    // format date
+    data['log_date'] = data['log_date'].substring(0, 10)
     this.rows.push(data);
-    this.render();
   }
 
   render() {
@@ -19,8 +20,8 @@ class DynamicTable extends HTMLElement {
           
           <tr>
               <th style="width: 200px">Datum ispiranja</th>
-              <th colspan="4">Napomena</th>
-              <th colspan="4">Izvršioc</th>
+              <th>Napomena</th>
+              <th>Izvršioc</th>
             </tr>
 
           </thead>
@@ -30,11 +31,9 @@ class DynamicTable extends HTMLElement {
                 (row) => `
               <tr>
                 
-                <td>${row.DAN}</td>
-                <td>${row.TEMP}</td>
-                <td>${row.PH}</td>
-                <td>${row.KLOR}td>
-                <td>${row.REDOKS}td>
+                <td>${row['log_date']}</td>
+                <td>${row['note']}</td>
+                <td>${row['operator']}</td>
 
               </tr>`
               )

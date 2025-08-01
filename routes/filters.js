@@ -7,9 +7,9 @@ const db = require('../db/index');
 router.get("/all", async (req, res) => {
     try {
         result = await db.query(`
-        select * from pool_filters_logs
+        select * from pool_filter_logs;
         `);
-        rows = result.rows;
+        res.json(result.rows)
 
 
     } catch (err) {
