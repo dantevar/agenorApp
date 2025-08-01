@@ -14,7 +14,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <script type="module" src="../web-components/izbornik.js"></script>
-    <script type="module" src="../web-components/generiraj-pdf-06"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -250,6 +249,11 @@
               </div>
             </div>
           </div>
+
+          <div class="container mt-5">
+            <a>Generirani PDF dokumenti:</a>
+            <div id="pdfLista"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -259,14 +263,13 @@
     // OSNOVNA SINTAKSA:
     // doc.text(text, x, y, options);
 
-    const marginLeft = 20;
-    const marginRight = 20;
-
-    const marginTop = 20;
-    let y = marginTop;
-    let INC = 10;
-
     document.getElementById("generirajPDF").addEventListener("click", () => {
+      const marginLeft = 20;
+      const marginRight = 20;
+
+      const marginTop = 20;
+      let y = marginTop;
+      let INC = 10;
       const data = {
         NAZIV: document.querySelector('input[name="NAZIV"]').value,
         DATUM: document.querySelector('input[name="DATUM"]').value,
@@ -365,12 +368,22 @@
       y += 30;
       doc.text(
         `Odgovorna osoba za rad bazenskog kupališta.\n\n\n\n` +
-          `_______________________________________`,
+          `_____________________________________`,
         pageWidth - marginRight,
         y,
         { maxWidth: maxWidth, align: "right" }
       );
-      doc.save("analiza_bazena.pdf");
+      const blob = doc.output("blob");
+      const url = URL.createObjectURL(blob);
+      const iframe = document.createElement("iframe");
+      iframe.src = url;
+      iframe.width = "100%";
+      iframe.height = "600px";
+      iframe.classList.add("mb-4", "border");
+
+      document.getElementById("pdfLista").appendChild(iframe);
+
+      //      doc.save("analiza_bazena.pdf");
     });
   </script>
 </html>
