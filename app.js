@@ -11,8 +11,9 @@ const fs = require("fs");
 const app = express();
 const port = 3001;
 
-const indexRouter = require('./routes/indexRouter');
-const menuRouter = require('./routes/menuRouter');
+const indexRouter = require("./routes/indexRouter");
+const menuRouter = require("./routes/menuRouter");
+const poolsRouter = require("./routes/poolsRouter");
 const filterRouter = require('./routes/filters');
 
 app.use(express.json());
@@ -20,9 +21,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
-app.use('/', indexRouter);
-app.use('/menu', menuRouter);
+app.use("/", indexRouter);
+app.use("/menu", menuRouter);
+app.use("/pools", poolsRouter);
 app.use('/filters', filterRouter);
 
 app.listen(port, () => {
