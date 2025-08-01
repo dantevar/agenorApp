@@ -159,65 +159,6 @@
       .then((data) => console.log("Objekti iz frontenda:", data))
       .catch((err) => console.error(err));
     // *****************************************************
-    // ******************** POST ***************************
-
-    function posalji() {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // Dohvati objekt_id i pool_id iz dropdowna
-      const objektSelect = document.getElementById("objektSelect");
-      const bazenSelect = document.getElementById("bazenSelect");
-      const monthSelect = document.getElementById("monthSelect");
-
-      const objekt_id = objektSelect.value;
-      const pool_id = bazenSelect.value;
-      const mjesec = Number(monthSelect.value);
-      const godina = 2025; // fiksno... ?
-      const now = new Date();
-
-      // Uzmi dan i vrijeme iz sada
-      const dan = now.getDate();
-      const sati = now.getHours();
-      const minute = now.getMinutes();
-
-      const datum = new Date(godina, mjesec - 1, dan, sati, minute);
-      const timeStamp = datum.toISOString();
-
-      const to_databese = {
-        object_id: objekt_id,
-        pool_id: pool_id,
-        timeStamp: timeStamp,
-        cleaned_area: data.PROSTOR,
-        cleaner: data.OSOBA,
-      };
-
-      // Pošalji POST request na backend
-      fetch("/pools/cleaning_logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(to_databese),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Greška prilikom slanja podataka");
-          return res.json();
-        })
-        .then((responseData) => {
-          console.log("Uspješno poslano:", responseData);
-          alert("Podaci su uspješno uneseni!");
-          form.reset();
-          // Ovdje možeš dodatno ažurirati tablicu ako trebaš
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Došlo je do greške pri unosu podataka.");
-        });
-    }
-    form.addEventListener("submit", (e) => {});
-    // *****************************************************
-
     // Event listeneri za dropdownove
     document.addEventListener("DOMContentLoaded", () => {
       const objektSelect = document.getElementById("objektSelect");
@@ -264,7 +205,7 @@
               '<option value="" disabled selected>Odaberi bazen</option>';
             bazeni.forEach((bazen) => {
               const option = document.createElement("option");
-              option.value = bazen.object_id;
+              option.value = bazen.pool_id;
               option.textContent = bazen.pool_name;
               console.log(bazen.pool_name);
 
@@ -376,28 +317,74 @@
         .addEventListener("change", updateHeaderInfo);
     });
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+    // });
 
+    // ******************** POST ***************************
+
+    function posalji() {
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
-      // time is recorded as time of entry
-      var now = new Date();
-      data.VRIJEME =
-        now.getHours().toString() + ":" + now.getMinutes().toString();
-      data.DAN = now.getDate().toString();
-      console.log(data.VRIJEME);
-      // Dodaj red u tablicu
-      tablica.addRow(data);
 
-      // Spremi u localStorage
-      const trenutniPodaci = localStorage.getItem("moji_redovi");
-      const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
-      rows.push(data);
-      localStorage.setItem("moji_redovi", JSON.stringify(rows));
+      // Dohvati objekt_id i pool_id iz dropdowna
+      const bazenSelect = document.getElementById("bazenSelect");
+      const monthSelect = document.getElementById("monthSelect");
 
-      form.reset();
+      const pool_id = bazenSelect.value;
+      const mjesec = Number(monthSelect.value);
+      const godina = 2025; // fiksno... ?
+      const now = new Date();
+
+      // Uzmi dan i vrijeme iz sada
+      const dan = now.getDate();
+      const sati = now.getHours() + 2;
+      const minute = now.getMinutes();
+
+      const datum = new Date(godina, mjesec - 1, dan, sati, minute);
+      const timeStamp = datum.toISOString();
+
+      const to_databese = {
+        pool_id: pool_id,
+        cleaning_time: timeStamp,
+        cleaned_area: data.PROSTOR,
+        cleaner: data.OSOBA,
+      };
+
+      // Pošalji POST request na backend
+      fetch("http://localhost:3001/pools/cleaning_logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(to_databese),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Greška prilikom slanja podataka");
+          return res.json();
+        })
+        .then((responseData) => {
+          console.log("Uspješno poslano:", responseData);
+          alert("Podaci su uspješno uneseni!");
+          form.reset();
+          // Ovdje možeš dodatno ažurirati tablicu ako trebaš
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Došlo je do greške pri unosu podataka.");
+        });
+    }
+    form.addEventListener("submit", (e) => {
+      e.preventDefault(); // ZAŠTO -> želimo spriječiti default forme koji je POST /submit (postavljeno u samoj formi)
+      // Provjeri da li su obavezna polja ispunjena
+      const prostor = form.querySelector("input[name='PROSTOR']").value.trim();
+      const osoba = form.querySelector("input[name='OSOBA']").value.trim();
+      const objekt = document.getElementById("objektSelect").value;
+      const bazen = document.getElementById("bazenSelect").value;
+      const mjesec = document.getElementById("monthSelect").value;
+
+      if (!prostor || !osoba || !objekt || !bazen || !mjesec) {
+        alert("Molimo ispunite sva obavezna polja!");
+        return;
+      } else posalji();
     });
-    // });
+
+    // *****************************************************
   </script>
 </html>
