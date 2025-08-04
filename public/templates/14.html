@@ -321,15 +321,17 @@
 
     const tablica = document.getElementById("tablica");
 
-    // Funkcija za dohvat i prikaz cleaning logova
-    function ucitajCleaningLogove() {
-      fetch("http://localhost:3001/pools/cleaning_logs")
+    function ucitajCleaningLogove(poolId, objectId, yearMonth) {
+      const url = new URL("http://localhost:3001/pools/cleaning_logs");
+      url.searchParams.append("pool_id", poolId);
+      url.searchParams.append("month", month);
+      url.searchParams.append("year", 2025);
+      fetch(url)
         .then((res) => res.json())
         .then((data) => {
-          // Očisti postojeće retke u tablici (ako ima metoda za to, npr. reset ili izravno resetiraj rows)
-          tablica.rows = [];
+          tablica.rows = []; // metoda za resetiranje tablice
           data.forEach((row) => {
-            tablica.addRow(row);
+            tablica.addRow(row); // metoda za dodavanje retka
           });
         })
         .catch((err) => {

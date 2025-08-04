@@ -63,8 +63,10 @@ router.post("/cleaning_logs", async (req, res) => {
   }
 });
 
-// GET svi zapisi čišćenja (cleaning_logs) - ... za prikaz u tablici, nije implementirano na frontendu
+// GET svi zapisi čišćenja (cleaning_logs) - ... za prikaz u tablici, treba dohvatiti s filterom koji podrazumijeva za odabrani mjesec, bzen i objekt
 router.get("/cleaning_logs", async (req, res) => {
+  //  ?  const { pool_id, bject_id, cleaning_time } = req.body;
+
   try {
     const result = await db.query(`
       SELECT * from cleaning_logs
