@@ -10,6 +10,11 @@ class DynamicTable extends HTMLElement {
     this.rows.push(data);
     this.render();
   }
+  
+  setData(data) {
+    this.rows = data;
+    this.render();
+  }
 
   render() {
     const tableHTML = `
@@ -29,11 +34,10 @@ class DynamicTable extends HTMLElement {
               .map(
                 (row) => `
               <tr>
-                
-                <td>${row.DAN}</td>
-                <td>${row.PROSTOR}</td>
-                <td>${row.VRIJEME}</td>
-                <td>${row.OSOBA}</td>
+                <td>${row['day']}</td>
+                <td>${row['area']}</td>
+                <td>${row['time']}</td>
+                <td>${row['cleaner']}</td>
 
               </tr>`
               )

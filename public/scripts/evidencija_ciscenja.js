@@ -2,7 +2,7 @@
 
 
 async function fillObjDropdown(){
-    const objSelection = document.getElementById("objektSelection")
+    const objSelection = document.getElementById("objectSelection")
     
     const placeholderOption = document.createElement("option");
     placeholderOption.textContent = "-- Odaberite objekt --";
@@ -74,12 +74,66 @@ async function fetchPoolsByObjectId(objId){
 
 
 function getDate(){
-    const dateValue = document.selectedObjectId("dateSelection").value
+    const dateValue = document.getElementById("dateSelection").value
+    if (!dateValue) return [null, null, null];
+    const day =  dateValue.substring(8)
+    const month =  dateValue.substring(5,7)
+    const year = dateValue.substring(0,4)
+
+    return [parseInt(day, 10), parseInt(month, 10), parseInt(year)]
+    // const year = dateValue[]
 
 }
 
-function displayData(){
-    console.log("kjfdsjkfdsjk")
+async function displayData(){
+    const dateInfo = getDate()
+    const year = dateInfo[2]
+    const month = dateInfo[1]
+    // const day= dateInfo[0]
+
+    // id
+    const obj = document.getElementById("objectSelection").value
+    const pool = document.getElementById("poolSelection").value
+
+    // input check
+    if (obj.startsWith("-") || pool.startsWith("-") || obj == "" || pool == "")
+        return
+
+    try{
+   
+        const res = await fetch(`http://localhost:3001/cleaning?pool=${encodeURIComponent(pool)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+
+        if (!res.ok) throw new Error("Network response was not ok");
+    
+
+        const data = await res.json();
+        console.log("Fetched data:", data);
+        
+        // no data
+        if (data.length == 0){
+            document.getElementById("info").textContent = "Nema podataka za odabrani mjesec"
+        }
+        else{
+            const tabl = document.getElementById("tablica")
+            for (elem of data.array){
+                tabl.addRow({
+                    'day' : elem['time'].substring(8,10),
+                    'area' : elem['cleaned_area'],
+                    'time' : elem['time'].substring(11,18),
+                    'cleaner' : elem['cleaner'],
+                })
+            }
+            document.getElementById("info").textContent = `Prikaz za objekt: ${objName}, bazen: ${poolName}, godina: ${year}, mjesec: ${month}`
+
+
+        }
+
+    }
+    catch (error) {
+        console.error("Fetch error:", error);
+    }
+
+
 
 }
 
