@@ -8,12 +8,11 @@
     />
     <!-- Bootstrap Bundle JS (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <link rel="stylesheet" href="../css/global.css" />
-    
-    <script type="module" src="../web-components/tablica-10.js"></script>
+
+    <script type="module" src="../web-components/tablica-10-hidromasazni_bazeni.js"></script>
     <script type="module" src="../web-components/izbornik.js"></script>
-    <script type="module" src="../../routes/filters.js"></script>
 
     <script
       type="module"
@@ -36,50 +35,56 @@
     <div id="sadrzaj">
       <div class="container w-100 my-5">
         <h2 class="text-center">
-          Zapisnik o ispiranju filtara bazenskih kupališta
+          Kontinuirano mjerenje - Hidromasažni (SPA) bazeni
         </h2>
-        <p> Pregled podataka prema odabranim kriterijima:</p>
+
         <div style="font-size: large; display: inline-flex; gap: 3rem; align-items:stretch; justify-content: space-between;">
 
-            <div class="col-md-4">
-              <label class="form-label"
-                >Objekt:</label
-              >
-              <select
-                id="objectSelect"
-                name="OBJEKT"
-                class="form-select"
-                required
-              >
-                <option value="" selected disabled>Odaberi objekt</option>
-                <!-- Opcije će se učitati dinamički -->
-              </select>
-            </div>
-
-
-            <div class="col-md-4">
-              <label class="form-label"
-                >Mjesec:</label
-              >
-              <select
-                id="monthSelect"
-                name="MONTH"
-                class="form-select"
-                required
-              >
-                <option value="" selected disabled>Odaberi mjesec</option>
-                <!-- Opcije će se učitati dinamički -->
-              </select>
-            </div>
-
-            <button onsubmit="applyQuery">
-              Prikaži
-            </button>
+            <p id="objekt">Objekt: </p>
+            <p id="bazen">Hidromasažni bazen: </p>
+            <p id="mjesec">Mjesec: </p>
 
         </div>
 
         <hr>
 
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="card h-100">
+              <div class="card-body">
+                <!-- <form action="/submit" method="POST" class="row g-4">
+                  <div class="col-md-12">
+                    <label class="form-label"></label>
+                    
+                    <input
+                      type="text"
+                      name="PROSTOR"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Čišćenje izvršio</label>
+                    <input
+                      type="text"
+                      name="OSOBA"
+                      required
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-12 text-center">
+                    <input
+                      type="submit"
+                      value="Unesi"
+                      class="btn btn-dark"
+                    />
+                  </div>
+                </form> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <div class="card-body">
           <dynamic-table id="tablica"></dynamic-table>
@@ -92,6 +97,7 @@
   <script>
       const form = document.querySelector("form");
     // document.addEventListener("DOMContentLoaded", () => {
+    //   const tablica = document.getElementById("tablica");
 
     //   // Učitaj podatke iz localStorage
     //   const spremljeniPodaci = localStorage.getItem("moji_redovi");
@@ -116,68 +122,10 @@
         12: "prosinac"
     };
 
-    const tablica = document.getElementById("tablica");
-
-    fetch("http://localhost:3001/filters/all").then(response => {
-        if (!response.ok) throw new Error("Greška prilikom dohvata podataka");
-        return response.json();
-    })
-    .then(data => {
-            console.log(data)
-            data.forEach((row) => tablica.addRow(row));
-            tablica.render()
-        });
-
-
-    // TODO change this url to just /objects
-    fetch("http://localhost:3001/filters/objects").then(response => {
-        if (!response.ok) throw new Error("Greška prilikom dohvata podataka");
-        return response.json();
-    })
-    .then(data => {
-            console.log(data)
-            const objSelect = document.getElementById("objectSelect")
-
-            data.forEach((obj) =>{
-              const option = document.createElement("option");
-              option.value = obj.value;
-              option.textContent = obj.name;
-              objSelect.appendChild(option);
-          })
-        });
-
-    
-          const monSelect = document.getElementById("monthSelect")
-        
-            Object.entries(mjeseci).forEach((obj) =>{
-              const option = document.createElement("option");
-              option.value = obj[1];
-              option.textContent = obj[1];
-              monSelect.appendChild(option);
-          })
-  
-
-
-
-
-    function applyQuery(){
-
-      obj = document.getElementById("objectSelect").value;
-      month = document.getElementById("monthSelect").value;
-      console.log(obj, month)
-      fetch("http://localhost:3001/filters?object_name=${encodeURIComponent(obj)}&month={encodeURIComponent(month)}")
-
-    }
-
-  
-
     document.addEventListener("DOMContentLoaded", () => {
 
-        })
-        
-        tablica.rows;
-
-
+        document.getElementById('mjesec').textContent += mjeseci[(new Date()).getMonth()] ;
+    }) 
 
     //   form.addEventListener("submit", (e) => {
     //     e.preventDefault();

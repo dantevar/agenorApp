@@ -13,11 +13,11 @@ class NavMenu extends HTMLElement {
         <li><a href="../templates/04_broj_posjetitelja.html">BROJ POSJETITELJA</a></li>
         <li><a href="../templates/05_ukl_nedostataka.html">UKLANJANJE NEDOSTATAKA</a></li>
         <li><a href="../templates/06_rez_lab_analiza.html">REZULTATI LABORATORIJSKIH ANALIZA</a></li>
-        <li><a href="../templates/07_ispir_filtera.html">IZMJERENI POKAZATELJI - SLATKA VODA</a></li>
-        <li><a href="../templates/08_slatka_voda.html">IZMJERENI POKAZATELJI - MORSKA VODA</a></li>
-        <li><a href="../templates/09_morska_voda.html">ISPIRANJE FILTARA BAZENSKIH KUPALIŠTA</a></li>
+        <li><a href="../templates/08_slatka_voda.html">IZMJERENI POKAZATELJI - SLATKA VODA</a></li>
+        <li><a href="../templates/09_morska_voda.html">IZMJERENI POKAZATELJI - MORSKA VODA</a></li>
+        <li><a href="../templates/07_ispir_filtera.html">ISPIRANJE FILTARA BAZENSKIH KUPALIŠTA</a></li>
         <li><a href="../templates/10_hidromasazni_bazeni.html">IZMJERENI POKAZATELJI - HIDROMASAŽNI BAZENI</a></li>
-        <li><a href="../templates/11_plan_ciscenja.html">PLAN ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
+        <li><a href="../templates/placeholder.html">PLAN ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
         <li><a href="../templates/12_evidencija_ciscenja.html">EVIDENCIJA ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
       </ul>
     `;
