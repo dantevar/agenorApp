@@ -13,6 +13,7 @@
 
     <script type="module" src="../web-components/tablica-04.js"></script>
     <script type="module" src="../web-components/izbornik.js"></script>
+    <script src="../scripts/broj_posjetitelja.js" defer></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,48 +38,31 @@
                 <form action="/submit" method="POST" class="row g-4">
                   <div class="col-md-6">
                     <label class="form-label">Objekt</label>
-                    <input
-                      type="text"
-                      name="OBJEKT"
-                      required
-                      class="form-control"
-                    />
+                    <select name="OBJEKT" id="object-select" required class="form-select">
+                      <option value="" disabled selected>Učitavanje objekata...</option>
+                    </select>
+
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label class="form-label">Godina</label>
-                    <input
-                      type="number"
-                      name="GODINA"
-                      required
-                      class="form-control"
-                      placeholder="Unesi godinu"
-                    />
+                    <input type="number" name="GODINA" id="godina" required class="form-control" />
                   </div>
-                  <div class="col-12 text-center">
+                  <div class="col-md-3">
                     <label class="form-label">Mjesec</label>
-                    <select name="MJESEC" required class="form-select">
+                    <select name="MJESEC" id="mjesec" required class="form-select">
                       <option value="" disabled selected>Odaberi mjesec</option>
-                      <option value="01">Siječanj</option>
-                      <option value="02">Veljača</option>
-                      <option value="03">Ožujak</option>
-                      <option value="04">Travanj</option>
-                      <option value="05">Svibanj</option>
-                      <option value="06">Lipanj</option>
-                      <option value="07">Srpanj</option>
-                      <option value="08">Kolovoz</option>
-                      <option value="09">Rujan</option>
-                      <option value="10">Listopad</option>
-                      <option value="11">Studeni</option>
-                      <option value="12">Prosinac</option>
+                      <option value="01">Siječanj</option><option value="02">Veljača</option>
+                      <option value="03">Ožujak</option><option value="04">Travanj</option>
+                      <option value="05">Svibanj</option><option value="06">Lipanj</option>
+                      <option value="07">Srpanj</option><option value="08">Kolovoz</option>
+                      <option value="09">Rujan</option><option value="10">Listopad</option>
+                      <option value="11">Studeni</option><option value="12">Prosinac</option>
                     </select>
                   </div>
 
-                  <div class="col-12 text-center">
-                    <input
-                      type="submit"
-                      value="Napravi novu tablicu"
-                      class="btn btn-dark"
-                    />
+                  <div class="col-auto align-self-end d-flex gap-2">
+                    <button type="button" id="btnLoad" class="btn btn-primary">Učitaj tablicu</button>
+                    <button type="button" id="btnSave" class="btn btn-success">Spremi podatke</button>
                   </div>
                 </form>
               </div>
@@ -93,74 +77,5 @@
 
     <!-- /#wrapper -->
   </body>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.querySelector("form");
-      const wrapper = document.getElementById("tablice-wrapper");
-
-      function createCard({ objekt, godina, mjesec }) {
-        const card = document.createElement("div");
-        card.className = "card w-100 mb-5";
-
-        card.innerHTML = `
-        <div class="card-body">
-          <p class="text-center fw-bold">Tablica dnevnog broja kupača za ${mjesec}/${godina} "${objekt}"</p>
-          <dynamic-table></dynamic-table>
-          <div class="col-12 text-center mt-3">
-            <remove-button class="btn btn-sm btn-dark fw-semibold">Obriši</remove-button>
-          </div>
-        </div>
-      `;
-
-        wrapper.prepend(card);
-
-        // za brisanje
-        card.querySelector("remove-button").addEventListener("click", () => {
-          card.remove();
-
-          let tablice = JSON.parse(localStorage.getItem("Tablice")) || [];
-          tablice = tablice.filter(
-            (t) =>
-              !(
-                t.objekt === objekt &&
-                t.godina === godina &&
-                t.mjesec === mjesec
-              )
-          );
-          localStorage.setItem("Tablice", JSON.stringify(tablice));
-        });
-      }
-
-      // Učitavanje svih spremljenih kartica pri pokretanju stranice
-      const spremljeneTablice =
-        JSON.parse(localStorage.getItem("Tablice")) || [];
-      spremljeneTablice.forEach(createCard);
-
-      // Dodavanje nove kartice kroz formu
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-        const objekt = formData.get("OBJEKT");
-        const godina = formData.get("GODINA");
-        const mjesec = formData.get("MJESEC");
-        
-        // check for invalid year
-        if (godina < 1999) {
-          alert("Neispravna godina!")
-          return;
-        }
-        const novaTablica = { objekt, godina, mjesec };
-
-        // Spremi u localStorage
-        let tablice = JSON.parse(localStorage.getItem("Tablice")) || [];
-        tablice.unshift(novaTablica);
-        localStorage.setItem("Tablice", JSON.stringify(tablice));
-
-        createCard(novaTablica);
-
-        form.reset();
-      });
-    });
-  </script>
+  
 </html>

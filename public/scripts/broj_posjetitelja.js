@@ -1,11 +1,10 @@
-
 (async () => {
   const base = window.location.origin;
 
   async function fetchObjekti() {
     const res = await fetch(`${base}/api/objects`);
     const arr = await res.json();
-    const sel = document.getElementById('objekt-select');
+    const sel = document.getElementById('object-select');
     sel.innerHTML = '<option value="" disabled selected>Odaberi objekt</option>';
     arr.forEach(o => {
       const opt = document.createElement('option');
@@ -21,15 +20,15 @@
   });
 
 
-  document.getElementById('btnLoad').addEventListener('click', async () => {
-    const objekt = document.getElementById('objekt-select').value;
+ document.getElementById('btnLoad').addEventListener('click', async () => {
+    const objekt = document.getElementById('object-select').value;
     const godina = document.getElementById('godina').value;
     const mjesec = document.getElementById('mjesec').value;
     if (!objekt || !godina || !mjesec) {
       alert('Popuni objekt, godinu i mjesec.');
       return;
     }
-    const res = await fetch(`${base}/api/water_additions?objekt=${objekt}&godina=${godina}&mjesec=${mjesec}`);
+    const res = await fetch(`${base}/api/pool_visits?objekt=${objekt}&godina=${godina}&mjesec=${mjesec}`);
     const data = await res.json();
 
     table = document.getElementById('dynamicTable');
@@ -48,7 +47,7 @@
     
   });
 
-function populateTableFromData(dynamicTableInstance, data) {
+  function populateTableFromData(dynamicTableInstance, data) {
 
   dynamicTableInstance.columns = data.map(pool => ({
     pool_id: pool.pool_id,
@@ -60,7 +59,6 @@ function populateTableFromData(dynamicTableInstance, data) {
 
   dynamicTableInstance.render();
 }
-
 
 document.getElementById('btnSave').addEventListener('click', async () => {
   const table = document.getElementById('dynamicTable');
@@ -81,14 +79,14 @@ document.getElementById('btnSave').addEventListener('click', async () => {
         payload.push({
           pool_id: col.pool_id, 
           date: datum,
-          capacity: Number(val)
+          visits: Number(val)
         });
       }
     });
   });
 
 
-  const res = await fetch(`${window.location.origin}/api/water_additions`, {
+  const res = await fetch(`${window.location.origin}/api/pool_visits`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ additions: payload })
@@ -102,7 +100,6 @@ document.getElementById('btnSave').addEventListener('click', async () => {
     alert("Greška pri spremanju podataka.");
   }
 });
-
 
 
 })();
