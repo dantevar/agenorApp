@@ -94,5 +94,40 @@ router.get('/pool_table', async (req, res) => {
     
 });
 
+router.post('/water_additions', async (req, res) => {
+  const { additions } = req.body;
+
+  if (!Array.isArray(additions)) {
+    return res.status(400).json({ error: 'Neispravan format podataka.' });
+  }
+
+  try {
+    for (const add of additions) {
+      const { pool_id, date, capacity } = add;
+
+      // Provjeri postoji li već zapis
+      const existing = await db.query(
+        `SELECT 1 FROM water_additions WHERE pool_id = $1 AND date_of_water_addition = $2`,
+        [pool_id, date]
+      );
+
+      if (existing.rows.length === 0) {
+        // Ako ne postoji, umetni novi zapis
+        await db.query(
+          `INSERT INTO water_additions (pool_id, date_of_water_addition, capacity)
+           VALUES ($1, $2, $3)`,
+          [pool_id, date, capacity]
+        );
+      }
+    }
+
+    res.status(200).json({ message: 'Podaci spremljeni.' });
+  } catch (err) {
+    console.error(' Greška kod spremanja:', err);
+    res.status(500).json({ error: 'Greška u bazi.' });
+  }
+});
+
+
 
 module.exports = router;
