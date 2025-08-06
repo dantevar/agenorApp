@@ -13,6 +13,7 @@
 
     <script type="module" src="../web-components/tablica-14.js"></script>
     <script type="module" src="../web-components/izbornik.js"></script>
+    <script  type="module" src="../scripts/evidencija_ciscenja.js"></script>
 
     <script
       type="module"
@@ -35,8 +36,9 @@
     <div id="sadrzaj">
       <div class="container w-100 my-5">
         <h2 class="text-center">Evidencija čišćenja bazenskog kupališta</h2>
+        <p>Prikaz podataka:</p>
 
-        <div
+        <!-- <div
           style="
             font-size: large;
             display: inline-flex;
@@ -49,16 +51,34 @@
           <p id="mjesec">Mjesec:</p>
           <p id="naziv">Naziv bazenskog kupališta:</p>
         </div>
-        <hr />
 
-        <div class="row">
+        <hr />
+         -->
+
+        <!-- TODO input new cleaning record -->
+
+        <!-- <div class="row">
           <div class="col-md-8 mx-auto">
             <div class="card h-100">
               <div class="card-body">
                 <form action="/submit" method="POST" class="row g-4">
+                  <p style="font-weight: 700; font-size: large;">Unos novih podataka o čišćenju:</p>
+                  <div class="col-md-6 mb-4">
+                  <label for="objectSelect" class="form-label"
+                    >Izaberite objekt</label
+                  >
+                  <select
+                    id=""
+                    name="OBJEKT"
+                    class="form-select objectSelect"
+                    required
+                  >
+                    <option value="" selected disabled>Odaberi objekt</option>
+                  
+                  </select>
+                </div>
                   <div class="col-md-12">
                     <label class="form-label">Čišćeni prostor</label>
-                    <!-- TODO: trebao/mogao  bi biti izbornik -->
                     <input
                       type="text"
                       name="PROSTOR"
@@ -83,10 +103,12 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
+
+      <!-- prikaz tablice s podacima iz baze  -->
       <div class="card">
         <div class="card-body">
-          <div class="col-md-6 mb-4 mx-auto text-center">
+          <!-- <div class="col-md-6 mb-4 mx-auto text-center">
             <label for="monthSelect" class="form-label">Odaberi mjesec</label>
             <select id="monthSelect" class="form-select">
               <option value="" disabled selected>Odaberi mjesec</option>
@@ -103,33 +125,33 @@
               <option value="11">Studeni</option>
               <option value="12">Prosinac</option>
             </select>
-          </div>
+          </div> -->
 
+      
           <div class="row">
             <div class="col-md-6 mb-4">
               <label for="objektSelect" class="form-label"
-                >Izaberite objekt</label
+                >Prikaz za objekt: </label
               >
               <select
-                id="objektSelect"
+                id="objektSelection"
                 name="OBJEKT"
                 class="form-select"
                 required
               >
-                <option value="" selected disabled>Odaberi objekt</option>
+                <!-- <option value="" selected disabled>Odaberi objekt</option> -->
                 <!-- Opcije će se učitati dinamički -->
               </select>
             </div>
 
             <div class="col-md-6 mb-4">
-              <label for="bazenSelect" class="form-label"
-                >Izaberite bazen</label
+              <label for="poolSelection" class="form-label"
+                >Prikaz za bazen: </label
               >
               <select
-                id="bazenSelect"
+                id="poolSelection"
                 name="BAZEN"
                 class="form-select"
-                disabled
                 required
               >
                 <option value="" selected disabled>Odaberi bazen</option>
@@ -137,280 +159,35 @@
               </select>
             </div>
           </div>
-          <dynamic-table id="tablica"></dynamic-table>
+          <div class="row" >
+              <div class="col-md-6">
+                <label class="form-label">Godina i mjesec:</label>
+                <!-- TODO mozda promijeniti u hrvatski poredak dd-mm-yyy -->
+                <input
+                  type="date"
+                  name="DATUM"
+                  required
+                  class="form-control"
+                  id="dateSelection"
+                />
+
+              </div>
+              <div class="col-md-6" style="display:flex; flex-direction: column; justify-content:end ;">
+                 <input
+                 id="submitButton"
+                      type="submit"
+                      value="Ispuni dokument"
+                      class="btn btn-dark"
+                      style="height: min-content; width: min-content;"
+                    />
+              </div>
+                  
+          <dynamic-table id="tablica" style="padding-top: 30px;"></dynamic-table>
         </div>
       </div>
     </div>
 
     <!-- /#wrapper -->
   </body>
-  <script>
-    // Dohvaćanje podataka o objektima i bazenima
-    /*fetch("http://localhost:3001/pools/object")
-      .then((res) => res.json())
-      .then((data) => console.log("Objekti iz frontenda:", data))
-      .catch((err) => console.error(err));
-    fetch("http://localhost:3001/pools/pools")
-      .then((res) => res.json())
-      .then((data) => console.log("Objekti iz frontenda:", data))
-      .catch((err) => console.error(err));
-    fetch("http://localhost:3001/pools/pools/1")
-      .then((res) => res.json())
-      .then((data) => console.log("Objekti iz frontenda:", data))
-      .catch((err) => console.error(err));
-    */ // *****************************************************
-    // Event listeneri za dropdownove
-    document.addEventListener("DOMContentLoaded", () => {
-      const objektSelect = document.getElementById("objektSelect");
-      const bazenSelect = document.getElementById("bazenSelect");
 
-      // Napuni dropdown za objekte
-      fetch("http://localhost:3001/pools/object")
-        .then((res) => res.json())
-        .then((objects) => {
-          objects.forEach((objekt) => {
-            const option = document.createElement("option");
-            option.value = objekt.object_id;
-            option.textContent = objekt.name;
-            objektSelect.appendChild(option);
-          });
-          objektSelect.selectedIndex = 0;
-        })
-        .catch((err) => console.error(err));
-
-      //console.log(objektSelect);
-      // Na promjenu objekta, učitaj bazene
-      objektSelect.addEventListener("change", () => {
-        const selectedObjektId = objektSelect.value;
-        /*console.log(
-          "Ovo je id objekta za koji se raže bazeni: ",
-          objektSelect.value
-        );
-*/
-        if (!selectedObjektId) {
-          bazenSelect.innerHTML =
-            '<option value="" disabled selected>Odaberi bazen</option>';
-          bazenSelect.disabled = true;
-          return;
-        }
-
-        bazenSelect.disabled = true;
-        bazenSelect.innerHTML = "<option>Učitavanje bazena...</option>";
-
-        fetch(`http://localhost:3001/pools/pools/${selectedObjektId}`)
-          .then((res) => res.json())
-          .then((bazeni) => {
-            //console.log("...a ovo su njegovi bazeni: ", bazeni);
-            bazenSelect.innerHTML =
-              '<option value="" disabled selected>Odaberi bazen</option>';
-            bazeni.forEach((bazen) => {
-              const option = document.createElement("option");
-              option.value = bazen.pool_id;
-              option.textContent = bazen.pool_name;
-              // console.log(bazen.pool_name);
-
-              bazenSelect.appendChild(option);
-            });
-            bazenSelect.disabled = false;
-          })
-          .catch((err) => {
-            console.error(err);
-            bazenSelect.innerHTML =
-              '<option value="" disabled selected>Greška pri učitavanju bazena</option>';
-            bazenSelect.disabled = true;
-          });
-      });
-    });
-
-    objektSelect.addEventListener("change", () => {
-      const selectedObjektId = objektSelect.value;
-
-      if (!selectedObjektId) {
-        bazenSelect.innerHTML =
-          '<option value="" disabled selected>Odaberi bazen</option>';
-        bazenSelect.disabled = true;
-        return;
-      }
-
-      bazenSelect.disabled = true;
-      bazenSelect.innerHTML = "<option>Učitavanje bazena...</option>";
-
-      fetch(`http://localhost:3001/pools/pools/${selectedObjektId}`)
-        .then((res) => res.json())
-        .then((bazeni) => {
-          bazenSelect.innerHTML =
-            '<option value="" disabled selected>Odaberi bazen</option>';
-          bazeni.forEach((bazen) => {
-            const option = document.createElement("option");
-            option.value = bazen.pool_id; // koristi pravi ID ako postoji
-            option.textContent = bazen.pool_name;
-            bazenSelect.appendChild(option);
-          });
-          bazenSelect.disabled = false;
-          updateHeaderInfo();
-        })
-        .catch((err) => {
-          console.error(err);
-          bazenSelect.innerHTML =
-            '<option value="" disabled selected>Greška pri učitavanju bazena</option>';
-          bazenSelect.disabled = true;
-        });
-      bazenSelect.addEventListener("change", updateHeaderInfo); // dodala jer se nije mijenjao bazem na "headeru" iznad forme...
-    });
-
-    // *****************************************************
-
-    const form = document.querySelector("form");
-    // document.addEventListener("DOMContentLoaded", () => {
-    //   const tablica = document.getElementById("tablica");
-
-    //   // Učitaj podatke iz localStorage
-    //   const spremljeniPodaci = localStorage.getItem("moji_redovi");
-    //   if (spremljeniPodaci) {
-    //     const rows = JSON.parse(spremljeniPodaci);
-    //     rows.forEach((row) => tablica.addRow(row));
-    //   }
-
-    const mjeseci = {
-      1: "siječanj",
-      2: "veljača",
-      3: "ožujak",
-      4: "travanj",
-      5: "svibanj",
-      6: "lipanj",
-      7: "srpanj",
-      8: "kolovoz",
-      9: "rujan",
-      10: "listopad",
-      11: "studeni",
-      12: "prosinac",
-    };
-    function updateHeaderInfo() {
-      const objektSelect = document.getElementById("objektSelect");
-      const bazenSelect = document.getElementById("bazenSelect");
-      const monthSelect = document.getElementById("monthSelect");
-
-      const objektText =
-        objektSelect.options[objektSelect.selectedIndex].textContent || "";
-      const bazenText =
-        bazenSelect.options[bazenSelect.selectedIndex]?.textContent || "";
-      const mjesecValue = monthSelect.value;
-      const mjesecText = mjeseci[mjesecValue] || "";
-
-      document.getElementById("objekt").textContent = `Objekt: ${objektText}`;
-      document.getElementById(
-        "naziv"
-      ).textContent = `Naziv bazenskog kupališta: ${bazenText}`;
-      document.getElementById("mjesec").textContent = `Mjesec: ${mjesecText}`;
-    }
-
-    // Postavi izabrani mjesec u monthSelectu ili trenutni
-    document.addEventListener("DOMContentLoaded", () => {
-      const currentMonth = new Date().getMonth() + 1; // getMonth() vraća 0–11
-      document.getElementById("monthSelect").value = currentMonth.toString();
-
-      updateHeaderInfo();
-
-      // Slušaj promjene na dropdownu mjeseca
-      document
-        .getElementById("monthSelect")
-        .addEventListener("change", updateHeaderInfo);
-    });
-
-    // });
-
-    const tablica = document.getElementById("tablica");
-
-    function ucitajCleaningLogove(poolId, objectId, yearMonth) {
-      const url = new URL("http://localhost:3001/pools/cleaning_logs");
-      url.searchParams.append("pool_id", poolId);
-      url.searchParams.append("month", month);
-      url.searchParams.append("year", 2025);
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          tablica.rows = []; // metoda za resetiranje tablice
-          data.forEach((row) => {
-            tablica.addRow(row); // metoda za dodavanje retka
-          });
-        })
-        .catch((err) => {
-          console.error("Greška pri dohvaćanju cleaning logova:", err);
-        });
-    }
-
-    // Pozovi odmah po učitavanju stranice ili nakon unosa novog zapisa
-    document.addEventListener("DOMContentLoaded", () => {
-      ucitajCleaningLogove();
-    });
-
-    // ******************** POST ***************************
-
-    function posalji() {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // Dohvati objekt_id i pool_id iz dropdowna
-      const bazenSelect = document.getElementById("bazenSelect");
-      const monthSelect = document.getElementById("monthSelect");
-
-      const pool_id = bazenSelect.value;
-      const mjesec = Number(monthSelect.value);
-      const godina = 2025; // fiksno... ?
-      const now = new Date();
-
-      // Uzmi dan i vrijeme iz sada
-      const dan = now.getDate();
-      const sati = now.getHours() + 2; // ovo je dodano 2 jer je vrijeme s nultog meridijana...
-      const minute = now.getMinutes();
-
-      const datum = new Date(godina, mjesec - 1, dan, sati, minute);
-      const timeStamp = datum.toISOString();
-
-      const to_databese = {
-        pool_id: pool_id,
-        cleaning_time: timeStamp,
-        cleaned_area: data.PROSTOR,
-        cleaner: data.OSOBA,
-      };
-
-      console.log("POST", to_databese);
-      // Pošalji POST request na backend
-      fetch("http://localhost:3001/pools/cleaning_logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(to_databese),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Greška prilikom slanja podataka");
-          return res.json();
-        })
-        .then((responseData) => {
-          console.log("Uspješno poslano:", responseData);
-          alert("Podaci su uspješno uneseni!");
-          form.reset();
-          // Ovdje možeš dodatno ažurirati tablicu ako trebaš
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Došlo je do greške pri unosu podataka.");
-        });
-    }
-    form.addEventListener("submit", (e) => {
-      e.preventDefault(); // ZAŠTO -> želimo spriječiti default forme koji je POST /submit (postavljeno u samoj formi)
-      // Provjeri da li su obavezna polja ispunjena
-      const prostor = form.querySelector("input[name='PROSTOR']").value.trim();
-      const osoba = form.querySelector("input[name='OSOBA']").value.trim();
-      const objekt = document.getElementById("objektSelect").value;
-      const bazen = document.getElementById("bazenSelect").value;
-      const mjesec = document.getElementById("monthSelect").value;
-
-      if (!prostor || !osoba || !objekt || !bazen || !mjesec) {
-        alert("Molimo ispunite sva obavezna polja!");
-        return;
-      } else posalji();
-    });
-
-    // *****************************************************
-  </script>
 </html>
