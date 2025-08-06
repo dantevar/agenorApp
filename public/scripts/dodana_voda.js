@@ -42,28 +42,20 @@
     
   });
 
-  function populateTableFromData(dynamicTableInstance, data) {
-  // Resetiraj stupce
-  dynamicTableInstance.columns = [];
+function populateTableFromData(dynamicTableInstance, data) {
 
-  // Za svaki bazen iz data.bazeni, dodaj stupac sa nazivom i kapacitetom, i podacima (31 vrijednost)
-  data.bazeni.forEach((bazen) => {
-    // Pretpostavimo da su podaci već niz od 31 elementa (ako ne, treba ih popuniti do 31)
-    let podaci = bazen.dnevni_kapaciteti;
-    if (!podaci || podaci.length !== 31) {
-      podaci = Array(31).fill(0);
-    }
+  dynamicTableInstance.columns = data.map(pool => ({
+    naziv: pool.pool_name,
+    kapacitet: pool.pool_capacity,
+    podaci: pool.dailyCapacities
+  }));
 
-    dynamicTableInstance.columns.push({
-      naziv: bazen.pool_name,
-      kapacitet: bazen.pool_capacity,
-      podaci: podaci,
-    });
-  });
-
+  console.log('Popunjavanje tablice s kolonama:', dynamicTableInstance.columns);
 
   dynamicTableInstance.render();
 }
+
+
 
 
 

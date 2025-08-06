@@ -66,7 +66,7 @@ router.get('/pool_table', async (req, res) => {
 
         const poolsWithAdditions = pools.map(pool => {
         
-            const dailyCapacities = Array(daysInMonth).fill(0);
+            const dailyCapacities = Array(daysInMonth).fill(-1);
 
             const poolAdditions = additions.filter(add => add.pool_id === pool.pool_id);
 
@@ -85,7 +85,7 @@ router.get('/pool_table', async (req, res) => {
         });
 
         console.log('Dohvaćeni datumi:', poolsWithAdditions[1]);
-        res.json({ bazeni: poolsWithAdditions });
+        res.json(poolsWithAdditions);
     } catch (err) {
         console.error('Greška:', err);
         res.status(500).json({ error: 'Database error' });

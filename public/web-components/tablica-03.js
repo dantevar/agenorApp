@@ -35,7 +35,7 @@ render() {
                     <input
                       class="form-control form-control-sm"
                       type="text"
-                      value="${col.podaci[rowIndex] !== undefined ? col.podaci[rowIndex] : ''}"
+                      value="${col.podaci[rowIndex] !== -1 ? col.podaci[rowIndex] : ''}"
                       data-col="${colIndex}"
                       data-row="${rowIndex}"
                     />
@@ -66,14 +66,16 @@ render() {
     ${tableHTML}
   `;
 
-  // Pohrani vrijednosti kad se mijenjaju inputi
   this.shadowRoot.querySelectorAll("input").forEach((input) => {
     input.addEventListener("input", (e) => {
       const col = parseInt(e.target.dataset.col);
       const row = parseInt(e.target.dataset.row);
-      this.columns[col].podaci[row] = e.target.value;
+      const val = e.target.value.trim();
+
+      this.columns[col].podaci[row] = val === "" ? -1 : val;
     });
   });
+
 }
 
 }
