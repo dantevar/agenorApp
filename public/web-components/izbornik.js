@@ -7,18 +7,18 @@ class NavMenu extends HTMLElement {
       </style>
       <ul class="sidebar-nav">
         <h1>IZBORNIK</h1>
-        <li><a href="../templates/01.html">UMJERAVANJE MJERAČA ZA RUČNO MJERENJE</a></li>
-        <li><a href="../templates/02.html">GODIŠNJE ISPIRANJE PROTOČNOG SUSTAVA BAZENA</a></li>
-        <li><a href="../templates/03.html">DODANA VODA</a></li>
-        <li><a href="../templates/04.html">BROJ POSJETITELJA</a></li>
-        <li><a href="../templates/05.html">UKLANJANJE NEDOSTATAKA</a></li>
-        <li><a href="../templates/06.html">REZULTATI LABORATORIJSKIH ANALIZA</a></li>
-        <li><a href="../templates/08.html">IZMJERENI POKAZATELJI - SLATKA VODA</a></li>
-        <li><a href="../templates/09.html">IZMJERENI POKAZATELJI - MORSKA VODA</a></li>
-        <li><a href="../templates/10.html">ISPIRANJE FILTARA BAZENSKIH KUPALIŠTA</a></li>
-        <li><a href="../templates/11.html">IZMJERENI POKAZATELJI - HIDROMASAŽNI BAZENI</a></li>
-        <li><a href="../templates/13.html">PLAN ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
-        <li><a href="../templates/14.html">EVIDENCIJA ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
+        <li><a href="../templates/01_umj_mjeraca.html">UMJERAVANJE MJERAČA ZA RUČNO MJERENJE</a></li>
+        <li><a href="../templates/02_god_ispiranje.html">GODIŠNJE ISPIRANJE PROTOČNOG SUSTAVA BAZENA</a></li>
+        <li><a href="../templates/03_dodana_voda.html">DODANA VODA</a></li>
+        <li><a href="../templates/04_broj_posjetitelja.html">BROJ POSJETITELJA</a></li>
+        <li><a href="../templates/05_ukl_nedostataka.html">UKLANJANJE NEDOSTATAKA</a></li>
+        <li><a href="../templates/06_rez_lab_analiza.html">REZULTATI LABORATORIJSKIH ANALIZA</a></li>
+        <li><a href="../templates/07_ispir_filtera.html">IZMJERENI POKAZATELJI - SLATKA VODA</a></li>
+        <li><a href="../templates/08_slatka_voda.html">IZMJERENI POKAZATELJI - MORSKA VODA</a></li>
+        <li><a href="../templates/09_morska_voda.html">ISPIRANJE FILTARA BAZENSKIH KUPALIŠTA</a></li>
+        <li><a href="../templates/10_hidromasazni_bazeni.html">IZMJERENI POKAZATELJI - HIDROMASAŽNI BAZENI</a></li>
+        <li><a href="../templates/11_plan_ciscenja.html">PLAN ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
+        <li><a href="../templates/12_evidencija_ciscenja.html">EVIDENCIJA ČIŠĆENJA, PRANJA I DEZINFEKCIJE BAZENSKOG PROSTORA</a></li>
       </ul>
     `;
   }
