@@ -11,6 +11,8 @@ const fs = require("fs");
 const app = express();
 const port = 3001;
 
+
+const apiRouter = require("./routes/apiRouter");
 const indexRouter = require("./routes/indexRouter");
 const menuRouter = require("./routes/menuRouter");
 const poolsRouter = require("./routes/poolsRouter");
@@ -22,6 +24,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
+app.use("/api", apiRouter);
 app.use("/menu", menuRouter);
 app.use("/pools", poolsRouter);
 app.use('/filters', filterRouter);
