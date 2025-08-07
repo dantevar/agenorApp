@@ -56,9 +56,9 @@ router.get('/water_additions', async (req, res) => {
         const endDate = `${godina}-${String(mjesec).padStart(2, '0')}-${daysInMonth}`;
         
         const additionsRes = await db.query(
-            `SELECT pool_id, date_of_water_addition, capacity 
+            `SELECT pool_id, addition_date, capacity 
              FROM water_additions 
-             WHERE pool_id = ANY($1) AND date_of_water_addition BETWEEN $2 AND $3`,
+             WHERE pool_id = ANY($1) AND addition_date BETWEEN $2 AND $3`,
             [poolIds, startDate, endDate]
         );
 
@@ -71,7 +71,7 @@ router.get('/water_additions', async (req, res) => {
             const poolAdditions = additions.filter(add => add.pool_id === pool.pool_id);
 
             poolAdditions.forEach(add => {
-                const date = new Date(add.date_of_water_addition);
+                const date = new Date(add.addition_date);
                 const day = date.getDate(); 
                 dailyCapacities[day - 1] = add.capacity; 
             });
@@ -107,14 +107,14 @@ router.post('/water_additions', async (req, res) => {
 
       // Provjeri postoji li već zapis
       const existing = await db.query(
-        `SELECT 1 FROM water_additions WHERE pool_id = $1 AND date_of_water_addition = $2`,
+        `SELECT 1 FROM water_additions WHERE pool_id = $1 AND addition_date = $2`,
         [pool_id, date]
       );
 
       if (existing.rows.length === 0) {
         // Ako ne postoji, umetni novi zapis
         await db.query(
-          `INSERT INTO water_additions (pool_id, date_of_water_addition, capacity)
+          `INSERT INTO water_additions (pool_id, addition_date, capacity)
            VALUES ($1, $2, $3)`,
           [pool_id, date, capacity]
         );
@@ -122,7 +122,7 @@ router.post('/water_additions', async (req, res) => {
       else{
         // Ako postoji, ažuriraj postojeći zapis
         await db.query(
-          `UPDATE water_additions SET capacity = $1 WHERE pool_id = $2 AND date_of_water_addition = $3`,
+          `UPDATE water_additions SET capacity = $1 WHERE pool_id = $2 AND addition_date = $3`,
           [capacity, pool_id, date]
         );
       }
@@ -175,9 +175,9 @@ router.get('/pool_visits', async (req, res) => {
         const endDate = `${godina}-${String(mjesec).padStart(2, '0')}-${daysInMonth}`;
         
         const additionsRes = await db.query(
-            `SELECT pool_id, date_of_visit, n_visitors 
+            `SELECT pool_id, visit_date, n_visitors 
              FROM pool_visits 
-             WHERE pool_id = ANY($1) AND date_of_visit BETWEEN $2 AND $3`,
+             WHERE pool_id = ANY($1) AND visit_date BETWEEN $2 AND $3`,
             [poolIds, startDate, endDate]
         );
 
@@ -190,7 +190,7 @@ router.get('/pool_visits', async (req, res) => {
             const poolAdditions = additions.filter(add => add.pool_id === pool.pool_id);
 
             poolAdditions.forEach(add => {
-                const date = new Date(add.date_of_visit);
+                const date = new Date(add.visit_date);
                 const day = date.getDate(); 
                 dailyCapacities[day - 1] = add.n_visitors;
             });
@@ -226,14 +226,14 @@ router.post('/pool_visits', async (req, res) => {
 
       // Provjeri postoji li već zapis
       const existing = await db.query(
-        `SELECT 1 FROM pool_visits WHERE pool_id = $1 AND date_of_visit = $2`,
+        `SELECT 1 FROM pool_visits WHERE pool_id = $1 AND visit_date = $2`,
         [pool_id, date]
       );
 
        if (existing.rows.length === 0) {
         // Ako ne postoji, umetni novi zapis
         await db.query(
-          `INSERT INTO pool_visits (pool_id, date_of_visit, n_visitors)
+          `INSERT INTO pool_visits (pool_id, visit_date, n_visitors)
            VALUES ($1, $2, $3)`,
           [pool_id, date, visits]
         );
@@ -241,7 +241,7 @@ router.post('/pool_visits', async (req, res) => {
       else{
         // Ako postoji, ažuriraj postojeći zapis
         await db.query(
-          `UPDATE pool_visits SET n_visitors = $1 WHERE pool_id = $2 AND date_of_visit = $3`,
+          `UPDATE pool_visits SET n_visitors = $1 WHERE pool_id = $2 AND visit_date = $3`,
           [visits, pool_id, date]
         );
       }
