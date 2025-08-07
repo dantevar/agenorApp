@@ -35,35 +35,66 @@
     // Neka dynamic-table element postoji u DOM-u
     const table = document.querySelector("dynamic-table");
     console.log('Dohvaćeni podaci:', data);
-    console.log('Dynamic table element:', table);
     if (table && data) {
       populateTableFromData(table, data);
     }
     
   });
 
-  function populateTableFromData(dynamicTableInstance, data) {
-  // Resetiraj stupce
-  dynamicTableInstance.columns = [];
+function populateTableFromData(dynamicTableInstance, data) {
 
-  // Za svaki bazen iz data.bazeni, dodaj stupac sa nazivom i kapacitetom, i podacima (31 vrijednost)
-  data.bazeni.forEach((bazen) => {
-    // Pretpostavimo da su podaci već niz od 31 elementa (ako ne, treba ih popuniti do 31)
-    let podaci = bazen.dnevni_kapaciteti;
-    if (!podaci || podaci.length !== 31) {
-      podaci = Array(31).fill(0);
-    }
-
-    dynamicTableInstance.columns.push({
-      naziv: bazen.pool_name,
-      kapacitet: bazen.pool_capacity,
-      podaci: podaci,
-    });
-  });
+  dynamicTableInstance.columns = data.map(pool => ({
+    pool_id: pool.pool_id,
+    naziv: pool.pool_name,
+    kapacitet: pool.pool_capacity,
+    podaci: pool.dailyCapacities
+  }));
 
 
   dynamicTableInstance.render();
 }
+
+
+document.getElementById('btnSave').addEventListener('click', async () => {
+  const table = document.getElementById('dynamicTable');
+  if (!table || !table.columns || table.columns.length === 0) {
+    alert('Nema podataka za spremiti.');
+    return;
+  }
+
+  const godina = document.getElementById('godina').value;
+  const mjesec = document.getElementById('mjesec').value;
+
+  const payload = [];
+
+  table.columns.forEach(col => {
+    col.podaci.forEach((val, dayIndex) => {
+      if (val !== -1 && val !== '') {
+        const datum = `${godina}-${String(mjesec).padStart(2, '0')}-${String(dayIndex + 1).padStart(2, '0')}`;
+        payload.push({
+          pool_id: col.pool_id, 
+          date: datum,
+          capacity: Number(val)
+        });
+      }
+    });
+  });
+
+
+  const res = await fetch(`${window.location.origin}/api/water_additions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ additions: payload })
+  });
+
+  if (res.ok) {
+    alert("Podaci uspješno spremljeni.");
+  } else {
+    const err = await res.text();
+    console.error("Greška prilikom slanja:", err);
+    alert("Greška pri spremanju podataka.");
+  }
+});
 
 
 
