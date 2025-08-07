@@ -24,7 +24,7 @@ class DynamicTable extends HTMLElement {
           <thead>
           
           <tr>
-              <th colspan="1">  Površina </th>
+              <th colspan="1"> Površina </th>
               <th colspan="1"> Sredstvo </th>
               <th colspan="1"> Koncentracija sredstva </th>
               <th colspan="1"> Opis postupka </th>

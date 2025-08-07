@@ -53,6 +53,60 @@ router.get("/plan", async (req, res) => {
     }
 });
 
+router.post("/setplan", async (req, res) => {
+    const { pool_id, area, substance, substance_conc, process_desc, frequency } = req.body;
+    
+    if (!pool_id || !area) {
+    return res.status(400).send("Missing pool_id or area.");
+    }
+
+    try {
+    let result = await db.query(
+      `
+      UPDATE cleaning_plans
+      SET
+        substance = $1,
+        substance_conc = $2,
+        process_desc = $3,
+        frequency = $4
+      WHERE pool_id = $5 AND area = $6
+      RETURNING *;
+      `,
+      [substance, substance_conc, process_desc, frequency, pool_id, area]
+    );
+
+    
+    if (result.rowCount != 0) {
+       return res.status(200).send("Updated!");
+    }
+
+    result = await db.query(
+      `
+    INSERT INTO cleaning_plans (
+    pool_id,
+    area,
+    substance,
+    substance_conc,
+    process_desc,
+    frequency
+    ) VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *;
+      `,
+      [pool_id, area, substance, substance_conc, process_desc, frequency]
+    );
+    console.log("go")
+
+
+
+     res.json({ message: "Plan updated.", updated: result.rows[0] });
+
+    } catch (err) {
+        console.error("Greška :", err);
+        res.status(500).send("Greška");
+    }
+});
+
+
 
 
 

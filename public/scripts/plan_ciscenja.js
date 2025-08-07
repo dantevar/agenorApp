@@ -25,6 +25,7 @@ async function fillObjDropdown(){
         const selectedObjectId = objSelection.value;
         const poolSelection = document.getElementById("poolSelection")
         fillPoolDropdown(selectedObjectId)
+
         
     });  
     
@@ -77,15 +78,17 @@ async function fetchPoolsByObjectId(objId){
 async function displayData(){
 
     // id
-    const pool = document.getElementById("poolSelection").value
+    const pool = document.getElementById("poolSelection")
+    const obj = document.getElementById("objectSelection")
+    const pool_id = pool.value
 
     // input check
-    if (pool.startsWith("-") || pool == "" )
+    if (pool_id.startsWith("-") || pool_id == "" )
         return
 
     try{
    
-        const res = await fetch(`http://localhost:3001/cleaning/plan?pool=${encodeURIComponent(pool)}`)
+        const res = await fetch(`http://localhost:3001/cleaning/plan?pool=${encodeURIComponent(pool_id)}`)
 
         if (!res.ok) throw new Error("Network response was not ok");
     
@@ -115,7 +118,11 @@ async function displayData(){
             const tabl = document.getElementById("tablica")
             tabl.setData(data)
             
-            document.getElementById("info").textContent = `Prikaz za mjesec: ${numToMonth(month)}`
+            console.log("djsf")
+            document.getElementById("currentObject").textContent = obj.options[obj.selectedIndex].textContent
+            document.getElementById("currentObject").value = obj.options[obj.selectedIndex].value
+            document.getElementById("currentPool").textContent = pool.options[pool.selectedIndex].textContent
+            document.getElementById("currentPool").value = pool.options[pool.selectedIndex].value
 
 
         }
@@ -125,8 +132,37 @@ async function displayData(){
         console.error("Fetch error:", error);
     }
 
+}
+
+async function updateData(){
+    if (!document.getElementById('currentObject').value || !document.getElementById('currentPool').value ){
+        console.log("yikes")
+        return
+    }
+    
+    const data = {};
+
+    data['pool_id'] = document.getElementById('currentPool').value
+
+    const form = document.getElementById('cleaningValuesForm');
+    const formData = new FormData(form);
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    console.log(data)
+    
+    const res = await fetch(`http://localhost:3001/cleaning/setplan`,{
+        method:"POST",
+         headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+
+    if (!res.ok) throw new Error("Network response was not ok");
 
 
+    console.log("Fetched data:", data);
 }
 
 /////////////////
@@ -134,7 +170,10 @@ async function displayData(){
 document.addEventListener("DOMContentLoaded", () => {
     fillObjDropdown()
     document.getElementById("submitButton").addEventListener("click", displayData)
-    console.log("A")
+
+    document.getElementById('formButton').addEventListener('click', updateData)
+
+
 })
 
 

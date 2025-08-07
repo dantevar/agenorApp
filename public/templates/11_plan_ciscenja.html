@@ -36,96 +36,11 @@
     <div id="sadrzaj">
       <div class="container w-100 my-5">
         <h2 class="text-center">Plan čišćenja bazenskog kupališta</h2>
-        <p>Prikaz podataka:</p>
-
-        <!-- <div
-          style="
-            font-size: large;
-            display: inline-flex;
-            gap: 3rem;
-            align-items: stretch;
-            justify-content: space-between;
-          "
-        >
-          <p id="objekt">Objekt:</p>
-          <p id="mjesec">Mjesec:</p>
-          <p id="naziv">Naziv bazenskog kupališta:</p>
-        </div>
-
-        <hr />
-         -->
-
-        <!-- TODO input new cleaning record -->
-
-        <div class="row">
-          <div class="col-md-8 mx-auto">
-            <div class="card h-100">
-              <div class="card-body">
-                <form action="/submit" method="POST" class="row g-4">
-                  <p style="font-weight: 700; font-size: large;">Unos novih podataka o planu čišćenja *samo za admine:</p>
-                  <div class="col-md-6 mb-4">
-                  <label for="objectSelect" class="form-label"
-                    >Izaberite objekt</label
-                  >
-                  <select
-                    id=""
-                    name="OBJEKT"
-                    class="form-select objectSelect"
-                    required
-                  >
-                    <option value="" selected disabled>Odaberi objekt</option>
-                  
-                  </select>
-                </div>
-                  <div class="col-md-12">
-                    <label class="form-label">Čišćeni prostor</label>
-                    <input
-                      type="text"
-                      name="PROSTOR"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-md-12">
-                    <label class="form-label">Čišćenje izvršio</label>
-                    <input
-                      type="text"
-                      name="OSOBA"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-12 text-center">
-                    <input type="submit" value="Unesi" class="btn btn-dark" />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+  
       <!-- prikaz tablice s podacima iz baze  -->
       <div class="card">
         <div class="card-body">
-          <!-- <div class="col-md-6 mb-4 mx-auto text-center">
-            <label for="monthSelect" class="form-label">Odaberi mjesec</label>
-            <select id="monthSelect" class="form-select">
-              <option value="" disabled selected>Odaberi mjesec</option>
-              <option value="1">Siječanj</option>
-              <option value="2">Veljača</option>
-              <option value="3">Ožujak</option>
-              <option value="4">Travanj</option>
-              <option value="5">Svibanj</option>
-              <option value="6">Lipanj</option>
-              <option value="7">Srpanj</option>
-              <option value="8">Kolovoz</option>
-              <option value="9">Rujan</option>
-              <option value="10">Listopad</option>
-              <option value="11">Studeni</option>
-              <option value="12">Prosinac</option>
-            </select>
-          </div> -->
+        <p style="font-weight: 700;">Prikaz trenutnih podataka:</p>
 
       
           <div class="row">
@@ -136,7 +51,7 @@
               <select
                 id="objectSelection"
                 name="OBJEKT"
-                class="form-select"
+                class="form-select objectSelection"
                 required
               >
                 <!-- <option value="" selected disabled>Odaberi objekt</option> -->
@@ -174,10 +89,89 @@
           <p id="info" style="font-weight: 700;"></p>
                   
           <dynamic-table id="tablica" style="padding-top: 30px;"></dynamic-table>
-              
         </div>
       </div>
     </div>
+
+    
+
+        <div class="row">
+          <div class="col-md-12 mx-auto">
+            <div class="card h-100">
+              <div class="card-body">
+                <form class="row g-4" id="cleaningValuesForm">
+                  <p style="font-weight: 700; font-size: large;">Unos novih podataka o planu čišćenja *samo za admine:</p>
+
+                <div class="col-md-12">
+                    <p>Za objekt: </p>
+                    <p style="font-weight: 700;" id="currentObject">[izaberite objekt]</p>
+ 
+                    <p>Za bazen:</p>
+                    <p  style="font-weight: 700;" id="currentPool">[izaberite bazen]</p>
+                </div>
+                    
+                
+                <div class="col-md-12">
+                <label class="form-label">Čišćeni prostor</label>
+                <input
+                    type="text"
+                    name="area"
+                    required
+                    class="form-control"
+                />
+                </div>
+                <div class="col-md-12">
+                <label class="form-label">Sredstvo</label>
+                <input
+                    type="text"
+                    name="substance"
+                    required
+                    class="form-control"
+                />
+                </div>
+                <div class="col-md-12">
+                <label class="form-label">Koncentracija sredstva u % (format: [12.34])</label>
+                <input
+                    type="number"
+                    name="substance_conc"
+                    step="0.01"
+                    min="0"
+                    max="100"  
+                    required
+                    class="form-control"
+                />
+                </div>
+                <div class="col-md-12">
+                <label class="form-label">Opis postupka</label>
+                <textarea
+                    type="text"
+                    name="process_desc"
+                    required
+                    class="form-control"
+                    rows="4"
+                ></textarea>
+                </div>
+                <div class="col-md-12">
+                <label class="form-label">Učestalost</label>
+                <input
+                    type="text"
+                    name="frequency"
+                    required
+                    class="form-control"
+                />
+                </div>
+
+
+                  <div class="col-12 text-center">
+                    <input id="formButton" value="Unesi" class="btn btn-dark" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 
     <!-- /#wrapper -->
   </body>

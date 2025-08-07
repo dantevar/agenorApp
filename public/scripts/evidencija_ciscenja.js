@@ -22,8 +22,7 @@ async function fillObjDropdown(){
     
     
     objSelection.addEventListener("change", () => {
-        const selectedObjectId = objSelection.value;
-        const poolSelection = document.getElementById("poolSelection")
+        const selectedObjectId = objSelection.value;        
         fillPoolDropdown(selectedObjectId)
         
     });  
@@ -33,7 +32,7 @@ async function fillObjDropdown(){
 async function fillPoolDropdown(selectedObjectId){
     const pools = await fetchPoolsByObjectId(selectedObjectId)
     console.log(pools)
-    const poolSelection = document.getElementById("poolSelection")
+    const poolSelection = document.getElementById("poolSelectionId")
     
     poolSelection.innerHTML = "";
     
@@ -132,6 +131,7 @@ async function displayData(){
             tabl.setData(newData)
             
             document.getElementById("info").textContent = `Prikaz za mjesec: ${numToMonth(month)}`
+            
 
 
         }
