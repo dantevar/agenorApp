@@ -1,4 +1,5 @@
 class DynamicTable extends HTMLElement {
+  
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
