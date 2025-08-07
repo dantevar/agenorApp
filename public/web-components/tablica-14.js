@@ -26,6 +26,7 @@ class DynamicTable extends HTMLElement {
               <th>Čišćeni prostor - Č/N</th>
               <th>Vrijeme čišćenja</th>
               <th>Čišćenje izvršio</th>
+              <th>Provjereno</th>
 
             </tr>
           </thead>
@@ -38,6 +39,7 @@ class DynamicTable extends HTMLElement {
                 <td>${row['area']}</td>
                 <td>${row['time']}</td>
                 <td>${row['cleaner']}</td>
+                <td>${row['approved']}</td>
 
               </tr>`
               )

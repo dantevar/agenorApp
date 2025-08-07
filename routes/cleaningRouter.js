@@ -30,6 +30,31 @@ router.get("/", async (req, res) => {
 });
 
 
+router.get("/plan", async (req, res) => {
+    const {pool} = req.query;
+
+    if (!pool) {
+    return res.status(400).send("Missing parameter.");
+    }
+    
+    try {
+        result = await db.query(`
+
+        select * from cleaning_plans
+        where pool_id = $1
+        ;`, [pool]);
+
+        res.json(result.rows)
+
+
+    } catch (err) {
+        console.error("Greška :", err);
+        res.status(500).send("Greška");
+    }
+});
+
+
+
 
 
 module.exports = router;
