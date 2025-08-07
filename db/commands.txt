@@ -1,0 +1,13 @@
+
+dump
+
+pg_dump -U postgres -d agenor -f dump.sql
+
+
+import
+
+if exits
+    dropdb -U postgres agenor
+
+createdb -U postgres agenor
+psql -U postgres -d agenor -f backup-2025-08-07.sql
