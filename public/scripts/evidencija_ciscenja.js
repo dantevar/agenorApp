@@ -1,4 +1,4 @@
-
+import { numToMonth } from "./numToMonth.js";
 
 
 async function fillObjDropdown(){
@@ -96,7 +96,7 @@ async function displayData(){
     const pool = document.getElementById("poolSelection").value
 
     // input check
-    if (obj.startsWith("-") || pool.startsWith("-") || obj == "" || pool == "")
+    if (obj.startsWith("-") || pool.startsWith("-") || obj == "" || pool == "" || month == null)
         return
 
     try{
@@ -112,18 +112,25 @@ async function displayData(){
         // no data
         if (data.length == 0){
             document.getElementById("info").textContent = "Nema podataka za odabrani mjesec"
+            const tabl = document.getElementById("tablica")
+            tabl.setData([])
         }
         else{
-            const tabl = document.getElementById("tablica")
-            for (elem of data.array){
-                tabl.addRow({
-                    'day' : elem['time'].substring(8,10),
+            let newData = []
+            for (let elem of data){
+                newData.push({
+                    'day' : elem['cleaning_time'].substring(8,10),
                     'area' : elem['cleaned_area'],
-                    'time' : elem['time'].substring(11,18),
+                    'time' : elem['cleaning_time'].substring(11,16),
                     'cleaner' : elem['cleaner'],
                 })
             }
-            document.getElementById("info").textContent = `Prikaz za objekt: ${objName}, bazen: ${poolName}, godina: ${year}, mjesec: ${month}`
+
+            const tabl = document.getElementById("tablica")
+            tabl.setData(newData)
+            
+            console.log(numToMonth(1))
+            document.getElementById("info").textContent = `Prikaz za mjesec: ${numToMonth(month)}`
 
 
         }
