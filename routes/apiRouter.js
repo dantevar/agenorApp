@@ -119,6 +119,13 @@ router.post('/water_additions', async (req, res) => {
           [pool_id, date, capacity]
         );
       }
+      else{
+        // Ako postoji, ažuriraj postojeći zapis
+        await db.query(
+          `UPDATE water_additions SET capacity = $1 WHERE pool_id = $2 AND date_of_water_addition = $3`,
+          [capacity, pool_id, date]
+        );
+      }
     }
 
     res.status(200).json({ message: 'Podaci spremljeni.' });
@@ -229,6 +236,13 @@ router.post('/pool_visits', async (req, res) => {
           `INSERT INTO pool_visits (pool_id, date_of_visit, n_visitors)
            VALUES ($1, $2, $3)`,
           [pool_id, date, visits]
+        );
+      }
+      else{
+        // Ako postoji, ažuriraj postojeći zapis
+        await db.query(
+          `UPDATE pool_visits SET n_visitors = $1 WHERE pool_id = $2 AND date_of_visit = $3`,
+          [visits, pool_id, date]
         );
       }
     }
