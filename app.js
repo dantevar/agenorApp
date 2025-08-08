@@ -19,6 +19,7 @@ const poolsRouter = require("./routes/poolsRouter");
 const filterRouter = require('./routes/filters');
 const cleaningRouter = require('./routes/cleaningRouter');
 const adminRouter = require('./routes/adminRouter');
+const generalRouter = require('./routes/generalRouter');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -26,6 +27,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
+app.use("/", generalRouter);
 app.use("/api", apiRouter);
 app.use("/menu", menuRouter);
 app.use("/pools", poolsRouter);
