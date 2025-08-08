@@ -78,17 +78,21 @@ async function fetchPoolsByObjectId(objId){
 async function displayData(){
 
     // id
-    const pool = document.getElementById("poolSelection")
+        // id
     const obj = document.getElementById("objectSelection")
-    const pool_id = pool.value
+    const pool = document.getElementById("poolSelection")
+    const objId = obj.options[obj.selectedIndex].value
+    const poolId = pool.options[pool.selectedIndex].value
+    const objName = obj.options[obj.selectedIndex].textContent
+    const poolName = pool.options[pool.selectedIndex].textContent
 
     // input check
-    if (pool_id.startsWith("-") || pool_id == "" )
+    if (poolId.startsWith("-") || poolId == "" )
         return
 
     try{
    
-        const res = await fetch(`http://localhost:3001/cleaning/plan?pool=${encodeURIComponent(pool_id)}`)
+        const res = await fetch(`http://localhost:3001/cleaning/plan?pool=${encodeURIComponent(poolId)}`)
 
         if (!res.ok) throw new Error("Network response was not ok");
     
@@ -119,13 +123,17 @@ async function displayData(){
             tabl.setData(data)
             
             console.log("djsf")
-            document.getElementById("currentObject").textContent = obj.options[obj.selectedIndex].textContent
-            document.getElementById("currentObject").value = obj.options[obj.selectedIndex].value
-            document.getElementById("currentPool").textContent = pool.options[pool.selectedIndex].textContent
-            document.getElementById("currentPool").value = pool.options[pool.selectedIndex].value
-
+            // document.getElementById("currentObject").textContent = obj.options[obj.selectedIndex].textContent
+            // document.getElementById("currentObject").value = obj.options[obj.selectedIndex].value
+            // document.getElementById("currentPool").textContent = pool.options[pool.selectedIndex].textContent
+            // document.getElementById("currentPool").value =
 
         }
+
+
+        // update current pool
+        document.getElementById("currentPool").textContent = `${poolName} (${objName}) `
+        document.getElementById("currentPool").value =  pool.options[pool.selectedIndex].value
 
     }
     catch (error) {
