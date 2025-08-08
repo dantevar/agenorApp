@@ -21,12 +21,31 @@ router.get("/all", async (req, res) => {
 
 router.get("/filters", async (req, res) => {
     const objectId = req.query.object_id;
-    const month = req.query.month;
+    console.log("a")
 
     try {
         result = await db.query(
-        "SELECT * FROM filters WHERE object_id = $1 and extract(month from log_date) as month = $2",
+        "SELECT * FROM filters WHERE object_id = $1; ",
         [objectId], )
+        res.json(result.rows)
+
+
+    } catch (err) {
+        console.error("Greška :", err);
+        res.status(500).send("Greška");
+    }
+});
+
+
+// za sad dohvaca sve sve filtere 
+router.get("/logs", async (req, res) => {
+    const filter_id = req.query.filter_id;
+    console.log("a")
+
+    try {
+        result = await db.query(
+        "SELECT * FROM pool_filter_logs WHERE filter_id = $1; ",
+        [filter_id], )
         res.json(result.rows)
 
 
