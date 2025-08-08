@@ -17,9 +17,9 @@ class NavMenu extends HTMLElement {
       <li><a href="/menu/broj_posjetitelja">Broj posjetitelja</a></li>
       <li><a href="/menu/ukl_nedostataka">Uklanjanje nedostataka</a></li>
       <li><a href="/menu/rez_lab_analiza">Rezultati laboratorijskih analiza</a></li>
-      <li><a href="/menu/ispir_filtera">Izmjereni pokazatelji - slatka voda</a></li>
-      <li><a href="/menu/slatka_voda">Izmjereni pokazatelji - morska voda</a></li>
-      <li><a href="/menu/morska_voda">Ispiranje filtara bazenskih kupališta</a></li>
+      <li><a href="/menu/ispir_filtera">Ispiranje filtara bazenskih kupališta</a></li>
+      <li><a href="/menu/slatka_voda">Izmjereni pokazatelji - slatka voda</a></li>
+      <li><a href="/menu/morska_voda">Izmjereni pokazatelji - morska voda</a></li>
       <li><a href="/menu/hidromasazni_bazeni">Izmjereni pokazatelji - hidromasažni bazeni</a></li>
       <li><a href="/menu/plan_ciscenja">Plan čišćenja, pranja i dezinfekcije bazenskog prostora</a></li>
       <li><a href="/menu/evidencija_ciscenja">Evidencija čišćenja, pranja i dezinfekcije bazenskog prostora</a></li>
