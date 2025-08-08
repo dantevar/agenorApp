@@ -89,3 +89,16 @@ router.get("/cleaning_logs", async (req, res) => {
 });
 
 module.exports = router;
+
+// GET spa bazeni za određeni objekt
+router.get("/spa_pools/:objectId", async (req, res) => {
+  const { objectId } = req.params;
+  try {
+    const result = await db.query("SELECT * FROM pools WHERE is_spa = true AND object_id = $1", [objectId]);
+    console.log(`Spa bazeni za objekt ${objectId}:`, result.rows);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(`Greška pri dohvaćanju spa bazena:`, err);
+    res.status(500).send("Greška pri dohvaćanju spa bazena");
+  }
+});
