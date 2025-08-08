@@ -18,6 +18,7 @@ const menuRouter = require("./routes/menuRouter");
 const poolsRouter = require("./routes/poolsRouter");
 const filterRouter = require('./routes/filters');
 const cleaningRouter = require('./routes/cleaningRouter');
+const adminRouter = require('./routes/adminRouter');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -30,6 +31,7 @@ app.use("/menu", menuRouter);
 app.use("/pools", poolsRouter);
 app.use('/filters', filterRouter);
 app.use('/cleaning', cleaningRouter);
+app.use('/admin', adminRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

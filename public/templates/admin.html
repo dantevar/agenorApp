@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Bootstrap CSS -->
+      <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+      />
+      <!-- Bootstrap Bundle JS (includes Popper) -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"></script>
+
+      <link rel="stylesheet" href="../css/global.css" />
+
+      <script type="module" src="../web-components/izbornik.js"></script>
+      <script type="module" src="../scripts/admin.js"></script>
+
+      <script
+         type="module"
+         src="../web-components/tablica-posjetitelji.js"
+      ></script>
+
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Document</title>
+   </head>
+   <body>
+      <div id="wrapper">
+         <!-- Sidebar -->
+         <div id="sidebar-wrapper">
+            <nav-menu></nav-menu>
+         </div>
+         <!-- /#sidebar-wrapper -->
+      </div>
+
+      <!-- /#na stranici -->
+      <div id="sadrzaj">
+         <div class="container w-100 my-5">
+            <h2 class="text-center">Admin stvari</h2>
+
+            <!-- dodavanje novog objekta  -->
+            <div class="card">
+               <div class="card-body">
+                  <div class="row">
+                     <p style="font-weight: 700">
+                        Dodavanje novog objekta u bazu:
+                     </p>
+                     <form action="" id="newObjectForm">
+                     <div class="col-md-12">
+                        <label class="form-label">Ime novog objekta:</label>
+                        <input
+                           type="text"
+                           name="name"
+                           required
+                           class="form-control"
+                        />
+                     </div>
+
+                     <div
+                        class="m-4 d-flex justify-content-center align-items-center"
+                     >
+                        <input
+                           id="newObjectButton"
+                           type="button"
+                           value="Dodaj"
+                           class="btn btn-dark"
+                           style="height: min-content; width: min-content"
+                        />
+                     </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+
+            <!-- dodavanje novog bazena -->
+            <div class="card">
+               <div class="card-body">
+                  <div class="row">
+                     <p style="font-weight: 700">
+                        Dodavanje novog bazena u bazu:
+                     </p>
+
+                     <!-- select obj -->
+                     <div class="col-md-6 mb-4">
+                        <label  class="form-label"
+                           >Objekt:
+                        </label>
+                        <select
+                           id="objectSelection"
+                           name="obj"
+                           class="form-select objectSelection"
+                           required
+                        >
+                        </select>
+                     </div>
+
+                     <!-- ime bazena  -->
+                     <div class="col-md-6">
+                        <label class="form-label">Ime novog bazena:</label>
+                        <input
+                           type="text"
+                           name="pool"
+                           required
+                           class="form-control"
+                        />
+                     </div>
+
+                    <!-- kapacitet bazena  -->
+                     <div class="col-md-4 mb-4">
+                        <label for="objektSelect" class="form-label"
+                           >Kapacitet bazena:
+                        </label>
+                        <input
+                           id="capacity"
+                           name="capacity"
+                           type="number"
+                           class="form-select "
+                           required
+                        />
+                        
+                     </div>
+
+                     <!-- je li spa  -->
+                     <div class="col-md-2">
+                        <label class="form-label">Spa:</label>
+                         <select
+                           id="spa"
+                           name="spa"
+                           class="form-select objectSelection"
+                           required
+                        >
+                        <option value="true" selected >DA</option>
+                        <option value="false" selected >NE</option>
+                        </select>
+                     </div>
+
+                    <!-- vrsta vode  -->
+                     <div class="col-md-4">
+                        <label class="form-label">vrsta vode:</label>
+                         <select
+                           id="water"
+                           name="water"
+                           class="form-select objectSelection"
+                           required
+                        >
+                        <option value="FRESH" selected >Slatka voda</option>
+                        <option value="SEA" selected >Morska voda</option>
+                        <option value="MIXED" selected >Miješano</option>
+                        </select>
+                     </div>
+
+                     <!-- button -->
+                     <div
+                        class="m-4 d-flex justify-content-center align-items-center"
+                     >
+                        <input
+                           id="newObjectButton"
+                           type="button"
+                           value="Dodaj"
+                           class="btn btn-dark"
+                           style="height: min-content; width: min-content"
+                        />
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- /#wrapper -->
+   </body>
+</html>
