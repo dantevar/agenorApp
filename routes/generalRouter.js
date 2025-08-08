@@ -16,9 +16,9 @@ router.get("/objects", async (req, res) => {
 });
 
 // GET svi bazeni
-router.post("/pools", async (req, res) => {
+router.get("/pools", async (req, res) => {
    try {
-      const obj = req.body["object_id"];
+      const obj = req.query.object_id;
       if (!obj ) {
          return res.status(400).send("Invalid obj.");
       }

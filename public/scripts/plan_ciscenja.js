@@ -143,7 +143,6 @@ async function addEntry() {
 
    if (!res.ok) throw new Error("Network response was not ok");
 
-   console.log("Fetched data:", data);
 }
 
 /////////////////
