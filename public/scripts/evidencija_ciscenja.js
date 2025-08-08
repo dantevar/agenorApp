@@ -13,7 +13,6 @@ async function fillObjDropdown(){
     
     const objects = await fetchObjects()
     
-    console.log(objects)
     objects.forEach((obj) => {
         const option = document.createElement("option");
         option.value = obj.object_id;
@@ -32,7 +31,6 @@ async function fillObjDropdown(){
 
 async function fillPoolDropdown(selectedObjectId){
     const pools = await fetchPoolsByObjectId(selectedObjectId)
-    console.log(pools)
     const poolSelection = document.getElementById("poolSelection")
     
     poolSelection.innerHTML = "";
@@ -92,8 +90,7 @@ async function displayData(){
     
 
         const data = await res.json();
-        console.log("Fetched data:", data);
-        
+
         // no data
         if (data.length == 0){
             document.getElementById("info").textContent = "Nema podataka za odabrani mjesec"
@@ -173,8 +170,6 @@ async function addLog(){
     document.getElementById("resInfo").textContent = "Uspjeh!"
     displayData()
 
-    console.log("Fetched data:", data);
-
 }
 
 /////////////////
@@ -183,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fillObjDropdown()
     document.getElementById("submitButton").addEventListener("click", displayData)
     document.getElementById("formButton").addEventListener("click", addLog)
-    console.log("A")
 })
 
 

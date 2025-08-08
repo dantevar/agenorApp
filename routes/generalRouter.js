@@ -26,7 +26,6 @@ router.get("/pools", async (req, res) => {
          "SELECT * FROM pools where object_id = $1 ;",
          [obj]
       );
-      console.log("uspjeh:");
       res.json(result.rows);
    } catch (err) {
       console.error("Greška prilikom slanja:", err);

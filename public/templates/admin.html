@@ -16,8 +16,13 @@
 
       <script
          type="module"
-         src="../web-components/tablica-posjetitelji.js"
+         src="../web-components/objectsTable.js"
       ></script>
+          <script
+         type="module"
+         src="../web-components/poolsTable.js"
+      ></script>
+
 
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,8 +38,8 @@
       </div>
 
       <!-- /#na stranici -->
-      <div id="sadrzaj">
-         <div class="container w-100 my-5">
+      <div id="sadrzaj" class="col-md-8">
+         <div class="container my-5">
             <h2 class="text-center">Admin panel</h2>
 
             <!-- dodavanje novog objekta  -->
@@ -68,18 +73,28 @@
                      </div>
                      </form>
                   </div>
+
+                  <p>Svi objekti:</p>
+                  <objects-table id="objectsTable"></objects-table>
+
+                  
                </div>
             </div>
 
             <!-- dodavanje novog bazena -->
             <div class="card">
-               <div class="card-body">
+              <div class="card-body">
+                 <form  id="newPoolForm" >
                   <div class="row">
                      <p style="font-weight: 700">
                         Dodavanje novog bazena u bazu:
                      </p>
+                     <!-- pools by object -->
+                    
+
 
                      <!-- select obj -->
+
                      <div class="col-md-6 mb-4">
                         <label  class="form-label"
                            >Objekt:
@@ -87,18 +102,20 @@
                         <select
                            id="objectSelection"
                            name="obj"
-                           class="form-select objectSelection"
+                           class="form-select"
                            required
                         >
                         </select>
                      </div>
-
+                     <p>Bazeni u tom objektu:</p>
+                      <pools-table id="poolsTable">
+                    </pools-table>
                      <!-- ime bazena  -->
                      <div class="col-md-6">
                         <label class="form-label">Ime novog bazena:</label>
                         <input
                            type="text"
-                           name="pool"
+                           name="name"
                            required
                            class="form-control"
                         />
@@ -106,7 +123,7 @@
 
                     <!-- kapacitet bazena  -->
                      <div class="col-md-4 mb-4">
-                        <label for="objektSelect" class="form-label"
+                        <label for="" class="form-label"
                            >Kapacitet bazena:
                         </label>
                         <input
@@ -125,7 +142,7 @@
                          <select
                            id="spa"
                            name="spa"
-                           class="form-select objectSelection"
+                           class="form-select "
                            required
                         >
                         <option value="true" selected >DA</option>
@@ -135,16 +152,16 @@
 
                     <!-- vrsta vode  -->
                      <div class="col-md-4">
-                        <label class="form-label">vrsta vode:</label>
+                        <label class="form-label">Vrsta vode:</label>
                          <select
                            id="water"
                            name="water"
-                           class="form-select objectSelection"
+                           class="form-select"
                            required
                         >
                         <option value="FRESH" selected >Slatka voda</option>
                         <option value="SEA" selected >Morska voda</option>
-                        <option value="MIXED" selected >Miješano</option>
+                        <option value="MIX" selected >Miješano</option>
                         </select>
                      </div>
 
@@ -153,13 +170,14 @@
                         class="m-4 d-flex justify-content-center align-items-center"
                      >
                         <input
-                           id="newObjectButton"
+                           id="newPoolButton"
                            type="button"
                            value="Dodaj"
                            class="btn btn-dark"
                            style="height: min-content; width: min-content"
                         />
                      </div>
+                     </form>
                   </div>
                </div>
             </div>
