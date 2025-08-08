@@ -1,4 +1,6 @@
-    document.addEventListener("DOMContentLoaded", () => {
+   
+   
+   document.addEventListener("DOMContentLoaded", () => {
       const form = document.querySelector("form");
       const tablica = document.getElementById("tablica");
 

@@ -11,7 +11,6 @@ const fs = require("fs");
 const app = express();
 const port = 3001;
 
-
 const apiRouter = require("./routes/apiRouter");
 const indexRouter = require("./routes/indexRouter");
 const menuRouter = require("./routes/menuRouter");

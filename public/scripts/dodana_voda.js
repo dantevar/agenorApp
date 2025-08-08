@@ -1,4 +1,4 @@
-
+  
 (async () => {
   const base = window.location.origin;
 
@@ -9,7 +9,8 @@
     sel.innerHTML = '<option value="" disabled selected>Odaberi objekt</option>';
     arr.forEach(o => {
       const opt = document.createElement('option');
-      opt.value = o; opt.textContent = o;
+      opt.value = o.object_id;
+      opt.textContent = o.name;
       sel.append(opt);
     });
   }
