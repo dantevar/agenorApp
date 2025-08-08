@@ -1,3 +1,5 @@
+import { fetchObjects,fetchPoolsByObjectId } from "./getObjectsAndPools.js";
+
 
 async function fillObjDropdown() {
    const objSelection = document.getElementById("objectSelection");
@@ -44,26 +46,6 @@ async function fillPoolDropdown(selectedObjectId) {
       option.textContent = p.pool_name;
       poolSelection.appendChild(option);
    });
-}
-
-async function fetchObjects() {
-   const data = await fetch("http://localhost:3001/pools/object")
-      .then(res => {
-         return res.json();
-      })
-      .catch(err => console.error(err));
-   return data;
-}
-
-async function fetchPoolsByObjectId(objId) {
-   const data = fetch(`http://localhost:3001/pools/pools/${objId}`)
-      .then(res => {
-         return res.json();
-      })
-      .catch(err => {
-         console.error(err);
-      });
-   return data;
 }
 
 async function displayData() {

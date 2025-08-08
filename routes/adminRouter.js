@@ -3,17 +3,6 @@ const router = express.Router();
 const path = require("path");
 const db = require("../db/index");
 
-// GET svi objekti
-router.get("/object", async (req, res) => {
-   try {
-      const result = await db.query("SELECT * FROM objects");
-      console.log("Svi objekti:", result.rows);
-      res.json(result.rows);
-   } catch (err) {
-      console.error("Greška prilikom dohvaćanja objekata:", err);
-      res.status(500).send("Greška pri dohvaćanju objekata");
-   }
-});
 
 // POST novi objekt
 router.post("/newobject", async (req, res) => {
