@@ -32,7 +32,7 @@ async function fillObjDropdown(){
 async function fillPoolDropdown(selectedObjectId){
     const pools = await fetchPoolsByObjectId(selectedObjectId)
     console.log(pools)
-    const poolSelection = document.getElementById("poolSelectionId")
+    const poolSelection = document.getElementById("poolSelection")
     
     poolSelection.innerHTML = "";
     
@@ -91,16 +91,20 @@ async function displayData(){
     // const day= dateInfo[0]
 
     // id
-    const obj = document.getElementById("objectSelection").value
-    const pool = document.getElementById("poolSelection").value
+    const obj = document.getElementById("objectSelection")
+    const pool = document.getElementById("poolSelection")
+    const objId = obj.options[obj.selectedIndex].value
+    const poolId = pool.options[pool.selectedIndex].value
+    const objName = obj.options[obj.selectedIndex].textContent
+    const poolName = pool.options[pool.selectedIndex].textContent
 
     // input check
-    if (obj.startsWith("-") || pool.startsWith("-") || obj == "" || pool == "" || month == null)
+    if (objName.startsWith("-") || poolName.startsWith("-") || objName == "" || poolName == "" || month == null)
         return
 
     try{
    
-        const res = await fetch(`http://localhost:3001/cleaning?pool=${encodeURIComponent(pool)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+        const res = await fetch(`http://localhost:3001/cleaning/logs?pool=${encodeURIComponent(poolId)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
 
         if (!res.ok) throw new Error("Network response was not ok");
     
@@ -131,17 +135,63 @@ async function displayData(){
             tabl.setData(newData)
             
             document.getElementById("info").textContent = `Prikaz za mjesec: ${numToMonth(month)}`
-            
-
 
         }
+
+        // update za koji bazen se prikazuju podaci
+        document.getElementById("currentPool").textContent = `${poolName} (${objName}) `
+        document.getElementById("currentPool").value = poolId
 
     }
     catch (error) {
         console.error("Fetch error:", error);
     }
 
+}
 
+
+async function addLog(){
+
+    // get form data
+    const form = document.getElementById("cleaningInfoForm")
+    let data = {}
+    const formData = new FormData(form);
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    data['pool_id'] = document.getElementById("currentPool").value
+    console.log(data)
+    
+    // error checking
+    if (!data.time || !data.area || !data.date || !data.operator){
+        document.getElementById("resInfo").textContent = "Neispravni podaci"
+        return
+        }
+    if (!data.time.match(/^\d\d:\d\d$/)){
+        document.getElementById("resInfo").textContent = "Neispravni podaci"
+
+        return
+    }
+
+    //post data
+    const res = await fetch(`http://localhost:3001/cleaning/addlog`,{
+        method:"POST",
+         headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+
+    if (!res.ok){
+        document.getElementById("resInfo").textContent = "Neispravni podaci"
+        throw new Error("Network response was not ok");
+    } 
+
+    // uspjesno dodavanje !!
+    document.getElementById("resInfo").textContent = "Uspjeh!"
+    displayData()
+
+    console.log("Fetched data:", data);
 
 }
 
@@ -150,6 +200,7 @@ async function displayData(){
 document.addEventListener("DOMContentLoaded", () => {
     fillObjDropdown()
     document.getElementById("submitButton").addEventListener("click", displayData)
+    document.getElementById("formButton").addEventListener("click", addLog)
     console.log("A")
 })
 

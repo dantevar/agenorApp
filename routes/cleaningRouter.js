@@ -4,7 +4,7 @@ const path = require("path");
 const db = require('../db/index');
 
 
-router.get("/", async (req, res) => {
+router.get("/logs", async (req, res) => {
     const {pool, year, month} = req.query;
 
     if (!pool || !year || !month) {
@@ -107,6 +107,45 @@ router.post("/setplan", async (req, res) => {
 });
 
 
+
+router.post("/addlog", async (req, res) => {
+    const { pool_id, time, area, date, operator } = req.body;
+    
+    if (!pool_id || !time || !area || !date || !operator){
+    return res.status(400).send("Missing data.");
+    }
+
+    try {
+      const [year, month, day] = date.split('-').map(Number);
+      const [hours, minutes] = time.split(':').map(Number);
+      const timestamp = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+      if (isNaN(timestamp.getTime())) {
+        return res.status(400).send("Invalid date or time.");
+      }
+
+      result = await db.query(
+        `
+      INSERT INTO cleaning_logs (
+      pool_id,
+      cleaned_area,
+      cleaning_time,
+      cleaner
+      ) VALUES ($1, $2, $3, $4)
+      RETURNING *;
+        `,
+        [pool_id,  area, timestamp, operator]
+      );
+      console.log("go")
+
+
+
+      res.json({ message: "Logs updated.", updated: result.rows[0] });
+
+      } catch (err) {
+          console.error("Greška :", err);
+          res.status(500).send("Greška");
+      }
+});
 
 
 

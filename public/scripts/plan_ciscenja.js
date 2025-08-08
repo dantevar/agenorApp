@@ -134,7 +134,7 @@ async function displayData(){
 
 }
 
-async function updateData(){
+async function addEntry(){
     if (!document.getElementById('currentObject').value || !document.getElementById('currentPool').value ){
         console.log("yikes")
         return
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fillObjDropdown()
     document.getElementById("submitButton").addEventListener("click", displayData)
 
-    document.getElementById('formButton').addEventListener('click', updateData)
+    document.getElementById('formButton').addEventListener('click', addEntry)
 
 
 })

@@ -165,7 +165,7 @@
                 <!-- TODO mozda promijeniti u hrvatski poredak dd-mm-yyy -->
                 <input
                   type="date"
-                  name="DATUM"
+                  name="date"
                   required
                   class="form-control"
                   id="dateSelection"
@@ -188,7 +188,84 @@
               
         </div>
       </div>
-    </div>
+      </div>
+
+
+      
+        <div class="row">
+          <div class="col-md-12 mx-auto">
+            <div class="card h-100">
+              <div class="card-body">
+                <form class="row g-4" id="cleaningInfoForm">
+                  <p style="font-weight: 700; font-size: large;">Unos novog čišćenja za odabrani bazen:</p>
+                  <p id="currentPool" style="font-weight: 700; font-size: large;"></p>
+                
+                <div class="col-md-12">
+
+                   <label for="poolSelection" class="form-label">Čišćeni prostor: </label>
+                  <select
+                    id="areaEnum"
+                    name="area"
+                    class="form-select"
+                    required
+                  >
+                    <option value="" selected disabled>Odaberi prostor</option>
+                    <option value="C">Čisti dio bazenskog kupališta (bazen i okolna površina)</option>
+                    <option value="N" >Nečisti dio bazenskog kupališta (garderobe, sanitarni prostori)</option>
+                    <!-- Opcije će se učitati ovisno o objektu -->
+                  </select> 
+               
+                <div class="row">
+
+                <div class="col-md-6 mb-4">
+                <label class="form-label">Vrijeme: (između 00:00 i 24:00)</label>
+                <input
+                    type="text"
+                    name="time"
+                    required
+                    class="form-control"
+                />
+                </div>
+
+                <div class="col-md-6 mb-4">
+                <label class="form-label">Datum:</label>
+                <!-- TODO mozda promijeniti u hrvatski poredak dd-mm-yyy -->
+                <input
+                  type="date"
+                  name="date"
+                  required
+                  class="form-control"
+                  id="dateSelectionInp"
+                />
+
+                </div>
+                
+                </div>
+
+                
+                <div class="col-md-6 mb-4">
+                <label class="form-label">Čišćenje izvršio</label>
+                <input
+                    type="text"
+                    name="operator"
+                    required
+                    class="form-control"
+                />
+                </div>
+
+
+                  <div class="col-12 text-center">
+                    <input type="button" id="formButton" value="Unesi" class="btn btn-dark" />
+                    <p id="resInfo"></p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
 
     <!-- /#wrapper -->
   </body>
