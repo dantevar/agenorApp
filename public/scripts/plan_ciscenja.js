@@ -12,7 +12,6 @@ async function fillObjDropdown() {
 
    const objects = await fetchObjects();
 
-   console.log(objects);
    objects.forEach(obj => {
       const option = document.createElement("option");
       option.value = obj.object_id;
@@ -29,7 +28,6 @@ async function fillObjDropdown() {
 
 async function fillPoolDropdown(selectedObjectId) {
    const pools = await fetchPoolsByObjectId(selectedObjectId);
-   console.log(pools);
    const poolSelection = document.getElementById("poolSelection");
 
    poolSelection.innerHTML = "";
@@ -71,7 +69,6 @@ async function displayData() {
       if (!res.ok) throw new Error("Network response was not ok");
 
       const data = await res.json();
-      console.log("Fetched data:", data);
 
       // no data
       if (data.length == 0) {
@@ -95,7 +92,6 @@ async function displayData() {
          const tabl = document.getElementById("tablica");
          tabl.setData(data);
 
-         console.log("djsf");
          // document.getElementById("currentObject").textContent = obj.options[obj.selectedIndex].textContent
          // document.getElementById("currentObject").value = obj.options[obj.selectedIndex].value
          // document.getElementById("currentPool").textContent = pool.options[pool.selectedIndex].textContent
@@ -118,7 +114,6 @@ async function addEntry() {
       !document.getElementById("currentObject").value ||
       !document.getElementById("currentPool").value
    ) {
-      console.log("yikes");
       return;
    }
 
@@ -131,7 +126,6 @@ async function addEntry() {
    formData.forEach((value, key) => {
       data[key] = value;
    });
-   console.log(data);
 
    const res = await fetch(`http://localhost:3001/cleaning/setplan`, {
       method: "POST",
