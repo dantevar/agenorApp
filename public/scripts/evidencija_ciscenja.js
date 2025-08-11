@@ -16,7 +16,7 @@ async function fillObjDropdown(){
     objects.forEach((obj) => {
         const option = document.createElement("option");
         option.value = obj.object_id;
-        option.textContent = obj.name;
+        option.textContent = obj.object_name;
         objSelection.appendChild(option)
     });
     
