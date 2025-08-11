@@ -10,7 +10,7 @@ export function setupDynamicPage(config) {
     arr.forEach(o => {
       const opt = document.createElement('option');
       opt.value = o.object_id;
-      opt.textContent = o.name;
+      opt.textContent = o.object_name;
       sel.append(opt);
     });
   }
