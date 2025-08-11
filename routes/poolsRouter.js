@@ -5,6 +5,22 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/index");
 
+router.get("/", async (req, res) => {
+   try {
+      const obj = req.query.object_id;
+      if (!obj ) {
+         return res.status(400).send("Invalid obj.");
+      }
+      const result = await db.query(
+         "SELECT * FROM pools where object_id = $1 ;",
+         [obj]
+      );
+      res.json(result.rows);
+   } catch (err) {
+      console.error("Greška prilikom slanja:", err);
+      res.status(500).send("Greška pri slanju objekta");
+   }
+});
 
 router.post("/cleaning_logs", async (req, res) => {
   const { pool_id, cleaning_time, cleaned_area, cleaner } = req.body;
@@ -50,9 +66,7 @@ router.get("/cleaning_logs", async (req, res) => {
   }
 });
 
-module.exports = router;
 
-// GET spa bazeni za određeni objekt
 router.get("/spa_pools/:objectId", async (req, res) => {
   const { objectId } = req.params;
   try {
@@ -64,3 +78,16 @@ router.get("/spa_pools/:objectId", async (req, res) => {
     res.status(500).send("Greška pri dohvaćanju spa bazena");
   }
 });
+
+router.get("/object", async (req, res) => {  
+  try {
+    const result = await db.query("SELECT * FROM objects");
+    console.log("Dohvaćeni objekti:", result.rows);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Greška pri dohvaćanju objekata:", err);
+    res.status(500).send("Greška pri dohvaćanju objekata");
+  }
+});
+
+module.exports = router;

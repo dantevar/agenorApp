@@ -1,31 +1,38 @@
-   
-   
-   document.addEventListener("DOMContentLoaded", () => {
-      const form = document.querySelector("form");
-      const tablica = document.getElementById("tablica");
 
-      // Učitaj podatke iz localStorage
-      const spremljeniPodaci = localStorage.getItem("moji_redovi");
-      if (spremljeniPodaci) {
-        const rows = JSON.parse(spremljeniPodaci);
-        rows.forEach((row) => tablica.addRow(row));
-      }
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form");
+  const table = document.getElementById("tablica");
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
 
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+  fetch("/api/ukl_nedostataka")
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(row => table.addRow(row));
+    })
+    .catch(err => console.error("Greška pri dohvaćanju:", err));
 
-        // Dodaj red u tablicu
-        tablica.addRow(data);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        // Spremi u localStorage
-        const trenutniPodaci = localStorage.getItem("moji_redovi");
-        const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
-        rows.push(data);
-        localStorage.setItem("moji_redovi", JSON.stringify(rows));
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
-        form.reset();
+    table.addRow(data);
+
+    try {
+      const res = await fetch("/api/ukl_nedostataka", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       });
-    });
+
+      if (!res.ok) throw new Error("Greška pri spremanju");
+
+      alert("Podatak spremljen!");
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      alert("Spremanje nije uspjelo");
+    }
+  });
+});
