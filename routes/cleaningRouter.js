@@ -44,7 +44,7 @@ router.get("/plan", async (req, res) => {
         where pool_id = $1
         ;`, [pool]);
 
-        res.json(result.rows)
+        res.status(200).json(result.rows)
 
 
     } catch (err) {

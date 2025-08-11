@@ -7,7 +7,7 @@ const db = require("../db/index");
 exports.getUklNedostataka = async (req, res) => {
   try {
     const rows = await db.query("SELECT * FROM ukl_nedostataka");
-    res.json(rows);
+    res.status(200).json(rows);
   } catch (err) {
     console.error("Greška pri dohvaćanju:", err);
     res.status(500).json({ error: err.message });
