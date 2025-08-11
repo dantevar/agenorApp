@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/index');
 
+const authenticateToken  = require('../middleware/authMiddleware')
 
 // Kreiraj tablicu ako ne postoji
 db.query(`
@@ -19,14 +20,14 @@ db.query(`
   )
 `);
 
-apiController = require('../controllers/apiController');
+apiController = require('../controllers/apiController');    
 evidencijaController = require('../controllers/evidencijaController');
 
 router.get('/objects', apiController.getObjects);
 router.get('/pools', apiController.getPools);
 
 
-router.get('/water_additions', apiController.getWaterAdditions);
+router.get('/water_additions',authenticateToken ,  apiController.getWaterAdditions);
 router.post('/water_additions', apiController.postWaterAdditions);
 
 router.get('/pool_visits', apiController.getPoolVisits);
