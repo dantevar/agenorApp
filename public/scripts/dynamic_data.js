@@ -102,9 +102,7 @@ export function setupDynamicPage(config) {
     });
   }
 
-  // Ovo je ključno:
   setupPage(config);
 
-  // Također možeš, ako želiš, ostaviti funkciju na window za slučaj da trebaš ponovo pozvati
   window.setupDynamicPage = setupPage;
 }

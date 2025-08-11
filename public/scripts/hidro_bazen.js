@@ -1,5 +1,4 @@
 
-
 async function fillObjDropdown(){
     const objSelection = document.getElementById("objectSelection")
     
@@ -81,9 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("submitButton").addEventListener("click",  () => {
         
-        console.log("Kliknuto")
-        //todo
+        
     });
-    //  document.getElementById("formButton").addEventListener("click", addLog)
     
 })
