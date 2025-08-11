@@ -18,6 +18,7 @@ const poolsRouter = require("./routes/poolsRouter");
 const filterRouter = require('./routes/filtersRouter');
 const cleaningRouter = require('./routes/cleaningRouter');
 const adminRouter = require('./routes/adminRouter')
+const measuredRouter = require('./routes/measuredRouter')
 
 
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use("/pools", poolsRouter);
 app.use('/filters', filterRouter);
 app.use('/cleaning', cleaningRouter);
 app.use('/admin', adminRouter);
+app.use('/measured', measuredRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

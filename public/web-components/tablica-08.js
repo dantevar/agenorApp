@@ -82,4 +82,4 @@ class DynamicTable extends HTMLElement {
   }
 }
 
-customElements.define("dynamic-table", DynamicTable);
+customElements.define("mjerenje-tablica", DynamicTable);
