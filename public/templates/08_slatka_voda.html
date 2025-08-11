@@ -13,6 +13,7 @@
 
     <script type="module" src="../web-components/tablica-08.js"></script>
     <script type="module" src="../web-components/izbornik.js"></script>
+    <script  type="module" src="../scripts/evidencija_ciscenja.js"></script>
 
     <script
       type="module"
@@ -34,120 +35,156 @@
     <!-- /#na stranici -->
     <div id="sadrzaj">
       <div class="container w-100 my-5">
-        <h2 class="text-center">
-          Kontinuirano mjerenje - Slatka voda
-        </h2>
+        <h2 class="text-center">Izmjereni pokazatelji: slatka voda</h2>
+        <p>Prikaz podataka:</p>
 
-        <div style="font-size: large; display: inline-flex; gap: 3rem; align-items:stretch; justify-content: space-between;">
+       
 
-            <p id="objekt">Objekt: </p>
-            <p id="bazen">Bazen: </p>
-            <p id="mjesec">Mjesec: </p>
+      <!-- prikaz tablice s podacima iz baze  -->
+      <div class="card">
+        <div class="card-body">
 
+      
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <label for="objektSelect" class="form-label"
+                >Prikaz za objekt: </label
+              >
+              <select
+                id="objectSelection"
+                name="OBJEKT"
+                class="form-select"
+                required
+              >
+                <!-- <option value="" selected disabled>Odaberi objekt</option> -->
+                <!-- Opcije će se učitati dinamički -->
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label for="poolSelection" class="form-label"
+                >Prikaz za bazen: </label
+              >
+              <select
+                id="poolSelection"
+                name="BAZEN"
+                class="form-select"
+                required
+              >
+                <option value="" selected disabled>Odaberi bazen</option>
+                <!-- Opcije će se učitati ovisno o objektu -->
+              </select>
+            </div>
+          </div>
+          <div class="row" >
+              <div class="col-md-6">
+                <label class="form-label">Godina i mjesec:</label>
+                <!-- TODO mozda promijeniti u hrvatski poredak dd-mm-yyy -->
+                <input
+                  type="date"
+                  name="date"
+                  required
+                  class="form-control"
+                  id="dateSelection"
+                />
+
+              </div>
+              <div class="col-md-6" style="display:flex; flex-direction: column; justify-content:end ;">
+                 <input
+                 id="submitButton"
+                      type="submit"
+                      value="Prikaži"
+                      class="btn btn-dark"
+                      style="height: min-content; width: min-content;"
+                    />
+              </div>
+        
+          <p id="info" style="font-weight: 700;"></p>
+                  
+          <dynamic-table id="tablica" style="padding-top: 30px;"></dynamic-table>
+              
         </div>
+      </div>
+      </div>
 
-        <hr>
 
+      
         <div class="row">
-          <div class="col-md-8 mx-auto">
+          <div class="col-md-12 mx-auto">
             <div class="card h-100">
               <div class="card-body">
-                <!-- <form action="/submit" method="POST" class="row g-4">
-                  <div class="col-md-12">
-                    <label class="form-label"></label>
-                    
-                    <input
-                      type="text"
-                      name="PROSTOR"
-                      required
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-md-12">
-                    <label class="form-label">Čišćenje izvršio</label>
-                    <input
-                      type="text"
-                      name="OSOBA"
-                      required
-                      class="form-control"
-                    />
-                  </div>
+                <form class="row g-4" id="cleaningInfoForm">
+                  <p style="font-weight: 700; font-size: large;">Unos novog čišćenja za odabrani bazen:</p>
+                  <p id="currentPool" style="font-weight: 700; font-size: large;"></p>
+                
+                <div class="col-md-12">
+
+                   <label for="poolSelection" class="form-label">Čišćeni prostor: </label>
+                  <select
+                    id="areaEnum"
+                    name="area"
+                    class="form-select"
+                    required
+                  >
+                    <option value="" selected disabled>Odaberi prostor</option>
+                    <option value="C">Čisti dio bazenskog kupališta (bazen i okolna površina)</option>
+                    <option value="N" >Nečisti dio bazenskog kupališta (garderobe, sanitarni prostori)</option>
+                    <!-- Opcije će se učitati ovisno o objektu -->
+                  </select> 
+               
+                <div class="row">
+
+                <div class="col-md-6 mb-4">
+                <label class="form-label">Vrijeme: (između 00:00 i 24:00)</label>
+                <input
+                    type="text"
+                    name="time"
+                    required
+                    class="form-control"
+                />
+                </div>
+
+                <div class="col-md-6 mb-4">
+                <label class="form-label">Datum:</label>
+                <!-- TODO mozda promijeniti u hrvatski poredak dd-mm-yyy -->
+                <input
+                  type="date"
+                  name="date"
+                  required
+                  class="form-control"
+                  id="dateSelectionInp"
+                />
+
+                </div>
+                
+                </div>
+
+                
+                <div class="col-md-6 mb-4">
+                <label class="form-label">Čišćenje izvršio</label>
+                <input
+                    type="text"
+                    name="operator"
+                    required
+                    class="form-control"
+                />
+                </div>
+
+
                   <div class="col-12 text-center">
-                    <input
-                      type="submit"
-                      value="Unesi"
-                      class="btn btn-dark"
-                    />
+                    <input type="button" id="formButton" value="Unesi" class="btn btn-dark" />
+                    <p id="resInfo"></p>
                   </div>
-                </form> -->
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-body">
-          <dynamic-table id="tablica"></dynamic-table>
-        </div>
-      </div>
-    </div>
+      
+
 
     <!-- /#wrapper -->
   </body>
-  <script>
-      const form = document.querySelector("form");
-    // document.addEventListener("DOMContentLoaded", () => {
-    //   const tablica = document.getElementById("tablica");
 
-    //   // Učitaj podatke iz localStorage
-    //   const spremljeniPodaci = localStorage.getItem("moji_redovi");
-    //   if (spremljeniPodaci) {
-    //     const rows = JSON.parse(spremljeniPodaci);
-    //     rows.forEach((row) => tablica.addRow(row));
-    //   }
-
-
-    const mjeseci = {
-        1: "siječanj",
-        2: "veljača",
-        3: "ožujak",
-        4: "travanj",
-        5: "svibanj",
-        6: "lipanj",
-        7: "srpanj",
-        8: "kolovoz",
-        9: "rujan",
-        10: "listopad",
-        11: "studeni",
-        12: "prosinac"
-    };
-
-    document.addEventListener("DOMContentLoaded", () => {
-
-        document.getElementById('mjesec').textContent += mjeseci[(new Date()).getMonth()] ;
-    }) 
-
-    //   form.addEventListener("submit", (e) => {
-    //     e.preventDefault();
-
-    //     const formData = new FormData(form);
-    //     const data = Object.fromEntries(formData.entries());
-    //     // time is recorded as time of entry 
-    //     var now = new Date()
-    //     data.VRIJEME = now.getHours().toString() + ":" +now.getMinutes().toString()
-    //     data.DAN = now.getDate().toString()
-    //     // Dodaj red u tablicu
-    //     tablica.addRow(data);
-
-    //     // Spremi u localStorage
-    //     const trenutniPodaci = localStorage.getItem("moji_redovi");
-    //     const rows = trenutniPodaci ? JSON.parse(trenutniPodaci) : [];
-    //     rows.push(data);
-    //     localStorage.setItem("moji_redovi", JSON.stringify(rows));
-
-    //     form.reset();
-    //   });
-    
-    // });
-  </script>
 </html>

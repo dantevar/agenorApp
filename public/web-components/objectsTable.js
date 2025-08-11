@@ -29,7 +29,7 @@ class DynamicTable extends HTMLElement {
                 (row) => `
               <tr>
                 <td>${row['object_id']}</td>
-                <td>${row['name']}</td>
+                <td>${row['object_name']}</td>
               </tr>`
               )
               .join("")}

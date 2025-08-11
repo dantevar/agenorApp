@@ -12,6 +12,9 @@ class DynamicTable extends HTMLElement {
    }
 
    setData(data) {
+      data.forEach(element => {
+      element.log_date = element.log_date.substring(0,10)
+    });
       this.rows = data;
       this.render();
    }

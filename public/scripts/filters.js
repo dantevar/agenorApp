@@ -68,42 +68,33 @@ async function displayData() {
    const filId = fil.options[fil.selectedIndex].value;
    const objName = obj.options[obj.selectedIndex].textContent;
    const filName = fil.options[fil.selectedIndex].textContent;
+   const date = document.getElementById("dateSelection").value
+   
 
    // input check
-   if (filId.startsWith("-") || filId == "") return;
-
+   if (filId.startsWith("-") || filId == "" || date == null) return;
+   
    try {
+      console.log(date)
       const res = await fetch(
-         `http://localhost:3001/filters/filters?filter_id=${encodeURIComponent(
+         `http://localhost:3001/filters/logs?filter_id=${encodeURIComponent(
             filId
-         )}`
+         )}&date=${encodeURIComponent(date)}`
       );
-
+      
       if (!res.ok) throw new Error("Network response was not ok");
-
+      
       const data = await res.json();
-
+      console.log(data)
+      
       // no data
+      const tabl = document.getElementById("filterTable");
+      tabl.setData(data);
+      
       if (data.length == 0) {
-        //  document.getElementById("info").textContent =
-        //     "Nema podataka za odabrani bazen";
-         const tabl = document.getElementById("filterTable");
-         tabl.setData([]);
-      } else {
-         // data formating
-         // let newData = []
-         // for (let elem of data){
-         //     newData.push({
-         //         'day' : elem['cleaning_time'].substring(8,10),
-         //         'area' : elem['cleaned_area'],
-         //         'time' : elem['cleaning_time'].substring(11,16),
-         //         'cleaner' : elem['cleaner'],
-         //         'approved' : elem['approved'] == false ? "Ne" : "Da" ,
-         //     })
-         // }
 
-         const tabl = document.getElementById("filterTable");
-         tabl.setData(data);
+
+      } else {
 
          // document.getElementById("currentObject").textContent = obj.options[obj.selectedIndex].textContent
          // document.getElementById("currentObject").value = obj.options[obj.selectedIndex].value
@@ -124,7 +115,6 @@ async function displayData() {
 
 async function addEntry() {
    if (
-      !document.getElementById("currentObject").value ||
       !document.getElementById("currentfil").value
    ) {
       return;
@@ -132,15 +122,16 @@ async function addEntry() {
 
    const data = {};
 
-   data["pool_id"] = document.getElementById("currentPool").value;
+   data["filter_id"] = document.getElementById("currentfil").value;
 
-   const form = document.getElementById("cleaningValuesForm");
+   const form = document.getElementById("filterLogForm");
    const formData = new FormData(form);
    formData.forEach((value, key) => {
       data[key] = value;
    });
+   console.log(data)
 
-   const res = await fetch(`http://localhost:3001/cleaning/setplan`, {
+   const res = await fetch(`http://localhost:3001/filters/log`, {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
@@ -149,15 +140,21 @@ async function addEntry() {
    });
 
    if (!res.ok) throw new Error("Network response was not ok");
+   
+   document.getElementById("filterTable").render()
 }
 
 /////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
    fillObjDropdown();
-//    document
-//       .getElementById("submitButton")
-//       .addEventListener("click", displayData);
+   document
+      .getElementById("showButton")
+      .addEventListener("click", displayData);
 
-    document.getElementById("filterSelection").addEventListener("change", displayData);
+      document
+      .getElementById("submitButton")
+      .addEventListener("click", addEntry);
+
+
 });

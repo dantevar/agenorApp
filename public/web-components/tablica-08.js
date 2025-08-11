@@ -10,7 +10,12 @@ class DynamicTable extends HTMLElement {
     this.rows.push(data);
     this.render();
   }
-
+  
+  setData(data) {
+    this.rows = data;
+    this.render();
+  }
+  
   render() {
     const tableHTML = `
       <div>
