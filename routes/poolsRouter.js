@@ -66,7 +66,6 @@ router.get("/cleaning_logs", async (req, res) => {
   }
 });
 
-module.exports = router;
 
 router.get("/spa_pools/:objectId", async (req, res) => {
   const { objectId } = req.params;
@@ -90,3 +89,5 @@ router.get("/object", async (req, res) => {
     res.status(500).send("Greška pri dohvaćanju objekata");
   }
 });
+
+module.exports = router;
