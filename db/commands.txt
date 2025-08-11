@@ -6,7 +6,7 @@ pg_dump -U postgres -d agenor -f dump.sql
 
 import
 
-if exits
+if exists
     dropdb -U postgres agenor
 
 createdb -U postgres agenor
