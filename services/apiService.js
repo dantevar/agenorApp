@@ -5,15 +5,9 @@ exports.getObjects = async () => {
     return res.rows;
 };
 
-// Get all pools
 exports.getPools = async () => {
     const res = await db.query('SELECT * FROM pools');
     return res.rows;
-};
-
-exports.getObjectIdByName = async (name) => {
-    const res = await db.query('SELECT object_id FROM objects WHERE name = $1', [name]);
-    return res.rows[0]?.object_id || null;
 };
 
 exports.getPoolsByObjectId = async (objectId) => {
@@ -24,7 +18,7 @@ exports.getPoolsByObjectId = async (objectId) => {
     return res.rows;
 };
 
-
+// ---------------- WATER ADDITIONS ----------------
 exports.getWaterAdditions = async (poolIds, startDate, endDate) => {
     const res = await db.query(
         `SELECT pool_id, addition_date, capacity 
@@ -33,32 +27,29 @@ exports.getWaterAdditions = async (poolIds, startDate, endDate) => {
         [poolIds, startDate, endDate]
     );
     return res.rows;
-}
+};
 
 exports.addWaterAddition = async (pool_id, addition_date, capacity) => {
-      const existing = await db.query(
+    const existing = await db.query(
         `SELECT 1 FROM water_additions WHERE pool_id = $1 AND addition_date = $2`,
-        [pool_id, date]
-      );
+        [pool_id, addition_date]
+    );
 
-      if (existing.rows.length === 0) {
-        // Ako ne postoji, umetni novi zapis
+    if (existing.rows.length === 0) {
         await db.query(
-          `INSERT INTO water_additions (pool_id, addition_date, capacity)
-           VALUES ($1, $2, $3)`,
-          [pool_id, date, capacity]
+            `INSERT INTO water_additions (pool_id, addition_date, capacity)
+             VALUES ($1, $2, $3)`,
+            [pool_id, addition_date, capacity]
         );
-      }
-      else{
-        // Ako postoji, ažuriraj postojeći zapis
+    } else {
         await db.query(
-          `UPDATE water_additions SET capacity = $1 WHERE pool_id = $2 AND addition_date = $3`,
-          [capacity, pool_id, date]
+            `UPDATE water_additions SET capacity = $1 WHERE pool_id = $2 AND addition_date = $3`,
+            [capacity, pool_id, addition_date]
         );
-      }
-}
+    }
+};
 
-
+// ---------------- POOL VISITS ----------------
 exports.getVisits = async (poolIds, startDate, endDate) => {
     const res = await db.query(
         `SELECT pool_id, visit_date, n_visitors 
@@ -76,17 +67,15 @@ exports.addVisit = async (pool_id, visit_date, n_visitors) => {
     );
 
     if (existing.rows.length === 0) {
-        // Ako ne postoji, umetni novi zapis
         await db.query(
             `INSERT INTO pool_visits (pool_id, visit_date, n_visitors)
              VALUES ($1, $2, $3)`,
             [pool_id, visit_date, n_visitors]
         );
     } else {
-        // Ako postoji, ažuriraj postojeći zapis
         await db.query(
             `UPDATE pool_visits SET n_visitors = $1 WHERE pool_id = $2 AND visit_date = $3`,
             [n_visitors, pool_id, visit_date]
         );
     }
-}
+};
