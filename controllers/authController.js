@@ -50,8 +50,8 @@ exports.login = async (req, res) => {
     const payload = { id: user.id, email: user.email, role: user.role };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
-  //  res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' });
-    res.json({ message: 'Authenticated', user: { id: user.id, email: user.email} });
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' });
+    res.json({ message: 'Authenticated', user: { id: user.id, email: user.email } });
 
   } catch (err) {
     console.error('Login error:', err);
