@@ -3,91 +3,12 @@
 
 const express = require("express");
 const router = express.Router();
-const db = require("../db/index");
+const poolsController = require('../controllers/poolsController');
 
-router.get("/", async (req, res) => {
-   try {
-      const obj = req.query.object_id;
-      if (!obj ) {
-         return res.status(400).send("Invalid obj.");
-      }
-      const result = await db.query(
-         "SELECT * FROM pools where object_id = $1 ;",
-         [obj]
-      );
-      res.json(result.rows);
-   } catch (err) {
-      console.error("Greška prilikom slanja:", err);
-      res.status(500).send("Greška pri slanju objekta");
-   }
-});
-
-router.post("/cleaning_logs", async (req, res) => {
-  const { pool_id, cleaning_time, cleaned_area, cleaner } = req.body;
-
-  try {
-    // Ubaci cleaning log
-    await db.query(
-      "INSERT INTO cleaning_logs (pool_id, cleaning_time, cleaned_area, cleaner) VALUES ($1, $2, $3, $4)",
-      [pool_id, cleaning_time, cleaned_area, cleaner]
-    );
-    res.status(201).json({ message: "Cleaning log uspješno dodan" });
-  } catch (err) {
-    console.error("Error details:", err);
-
-    res
-      .status(500)
-      .send("Greška na serveru prilikom pokušaja unsa cleaning log-a");
-  }
-});
-
-// GET svi zapisi čišćenja (cleaning_logs) - ... za prikaz u tablici, treba dohvatiti s filterom koji podrazumijeva za odabrani mjesec, bzen i objekt
-router.get("/cleaning_logs", async (req, res) => {
-  //  ?  const { pool_id, bject_id, cleaning_time } = req.body;
-
-  try {
-    const result = await db.query(`
-      SELECT * from cleaning_logs
-    `);
-
-    // Mapiraj podatke za frontend
-    const cleanedData = result.rows.map((row) => ({
-      DAN: new Date(row.cleaning_time).getDay(),
-      PROSTOR: row.cleaned_area,
-      VRIJEME: new Date(row.cleaning_time).toLocaleString(), // ili formatiraj kako želiš
-      OSOBA: row.cleaner,
-      BAZEN: row.pool_name,
-    }));
-
-    res.json(cleanedData);
-  } catch (err) {
-    console.error("Greška pri dohvaćanju cleaning logova:", err);
-    res.status(500).send("Greška pri dohvaćanju cleaning logova");
-  }
-});
-
-
-router.get("/spa_pools/:objectId", async (req, res) => {
-  const { objectId } = req.params;
-  try {
-    const result = await db.query("SELECT * FROM pools WHERE is_spa = true AND object_id = $1", [objectId]);
-    console.log(`Spa bazeni za objekt ${objectId}:`, result.rows);
-    res.json(result.rows);
-  } catch (err) {
-    console.error(`Greška pri dohvaćanju spa bazena:`, err);
-    res.status(500).send("Greška pri dohvaćanju spa bazena");
-  }
-});
-
-router.get("/object", async (req, res) => {  
-  try {
-    const result = await db.query("SELECT * FROM objects");
-    console.log("Dohvaćeni objekti:", result.rows);
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Greška pri dohvaćanju objekata:", err);
-    res.status(500).send("Greška pri dohvaćanju objekata");
-  }
-});
+router.get('/', poolsController.getPoolsByObject);
+router.post('/cleaning_logs', poolsController.addCleaningLog);
+router.get('/cleaning_logs', poolsController.getCleaningLogs);
+router.get('/spa_pools/:objectId', poolsController.getSpaPools);
+router.get('/object', poolsController.getObjects);
 
 module.exports = router;

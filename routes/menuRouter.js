@@ -2,9 +2,6 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const db = require("../db/index");
-const authenticateToken = require("../middleware/authMiddleware");
-
-router.use(authenticateToken)
 
 router.get("/", (req, res) => {
    res.sendFile("menu.html", { root: path.join(__dirname, "../public") });
